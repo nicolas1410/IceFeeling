@@ -1,0 +1,23 @@
+  
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "icefeeling:enchanted_fragment"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "tag": "icefeeling:enchanted_dagger"
+          }
+        }
+      ]
+    }
+  ]
+}

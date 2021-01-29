@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "icefeeling",
+  "ingredients": [
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    },
+    {
+      "item": "icefeeling:robusium_plate"
+    }
+  ],
+  "result": {
+    "item": "icefeeling:robusium_block"
+  }
+}

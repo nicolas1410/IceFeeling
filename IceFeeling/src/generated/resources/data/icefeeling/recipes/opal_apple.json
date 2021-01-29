@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "icefeeling",
+  "pattern": [
+    "ooo",
+    "oxo",
+    "ooo"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "o": {
+      "item": "icefeeling:opal"
+    }
+  },
+  "result": {
+    "item": "icefeeling:opal_apple"
+  }
+}

@@ -1,0 +1,33 @@
+
+modLoader="javafml"
+
+loaderVersion="[35,)"
+
+license="All rights reserved"
+
+[[mods]] #mandatory
+
+modId="icefeeling" #mandatory
+
+version="${file.jarVersion}" #mandatory
+displayName="IceFeeling" #mandatory
+logoFile="examplemod.png" #optional
+credits="Thanks for this example mod goes to Java" #optional
+authors="Love, Cheese and small house plants" #optional
+description='''
+Halloweed mod for IceFeeling Faction PVP Server
+'''
+
+[[dependencies.icefeeling]]
+modId="forge"
+mandatory=true
+versionRange="[35,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.icefeeling]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.16.4]"
+ordering="NONE"
+side="BOTH"
