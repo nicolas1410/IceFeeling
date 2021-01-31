@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "icefeeling:item/mythril_pickaxe"
+  }
+}

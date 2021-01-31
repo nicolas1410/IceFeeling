@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "icefeeling:mythril_ore"
+  },
+  "result": "icefeeling:mythril_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

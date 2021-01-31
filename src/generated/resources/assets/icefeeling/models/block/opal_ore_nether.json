@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "icefeeling:block/opal_ore_nether"
+  }
+}
