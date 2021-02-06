@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "icefeeling:jade_boots"
+    ]
+  },
+  "criteria": {
+    "Recipes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "icefeeling:jade"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "icefeeling:jade_boots"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "Recipes",
+      "has_the_recipe"
+    ]
+  ]
+}

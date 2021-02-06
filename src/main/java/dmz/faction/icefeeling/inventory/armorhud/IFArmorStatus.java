@@ -10,7 +10,7 @@ public class IFArmorStatus {
 			return -1;
 		if (item.getMaxDamage() == 0)
 			return -2;
-		return (item.getMaxDamage() - item.getDamage()) * 100 / item.getMaxDamage();
+		return item.getMaxDamage() - item.getDamage()/* * 100 / item.getMaxDamage()*/;
 
 	}
 

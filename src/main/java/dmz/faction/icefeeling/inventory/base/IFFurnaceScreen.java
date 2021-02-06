@@ -44,10 +44,10 @@ public class IFFurnaceScreen<T extends IFFurnaceContainer> extends ContainerScre
 		this.blit(matrixStack, relX, relY, 0, 0, this.xSize, this.ySize);
 		int i;
 		if (container.isBurning()) {
-			i = (container.getBurnLeftScaled(13));
+			i = (container.getBurnLeftScaled());
 			this.blit(matrixStack, guiLeft + 56, guiTop + 36 + 12 - i, 176, 12 - i, 14, i + 1);
 		}
-		i = (container.getCookScaled(24));
+		i = (container.getCookScaled());
 		this.blit(matrixStack, guiLeft + 79, guiTop + 34, 176, 14, i + 1, 16);
 
 	}

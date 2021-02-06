@@ -1,6 +1,7 @@
 package dmz.faction.icefeeling.blocks;
 
 import dmz.faction.icefeeling.entities.chargedtnt.IFChargedTNTEntity;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -19,7 +20,7 @@ public class IFDurabilityTNTBlock extends Block implements IForgeBlockState {
 	public static final IntegerProperty TNT_DURABILITY_0_12 = IntegerProperty.create("tnt_durability", 0, 12);
 	public static final IntegerProperty TNT = TNT_DURABILITY_0_12;
 	
-	public IFDurabilityTNTBlock(Properties properties) {
+	public IFDurabilityTNTBlock(AbstractBlock.Properties properties) {
 		super(properties);
 	}
 

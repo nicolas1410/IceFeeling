@@ -15,17 +15,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public enum IFArmorMaterial implements IArmorMaterial {
 
 	
-	JADE("jade", 40, new int[]{2, 4, 6, 3}, 25, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0.1F, () -> { //15 points
+	JADE("jade", 40, new int[]{2, 4, 6, 3}, 20, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //15 points
 		return Ingredient.fromItems(IFItems.JADE.get());
 	}),
-	TITANITE("titanite", 150, new int[]{2, 4, 6, 3}, 25, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0.1F, () -> { //15 points
+	TITANITE("titanite", 150, new int[]{2, 5, 6, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //16 points
 		return Ingredient.fromItems(IFItems.TITANITE_INGOT.get());
 	}),
-	MYTHRIL("mythril", 40, new int[]{3, 5, 7, 4}, 20, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0.1F, () -> { //19 points
+	MYTHRIL("mythril", 40, new int[]{3, 6, 7, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //20 points
 		return Ingredient.fromItems(IFItems.MYTHRIL_INGOT.get());
 	}),
 
-	OBSIDIAN("obsidian", 80, new int[]{4, 7, 9, 4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 1.0F, () -> { //24 points
+	OBSIDIAN("obsidian", 80, new int[]{4, 7, 9, 4}, 7, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0.1F, () -> { //24 points
 		return Ingredient.fromItems(IFItems.OBSIDIAN_INGOT.get());
 	}),
 	OPAL("opal", 60, new int[]{5, 8, 10, 5}, 5, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 3.0F, 0.1F, () -> { //28 points

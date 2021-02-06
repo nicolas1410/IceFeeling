@@ -12,11 +12,14 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -64,27 +67,25 @@ public abstract class IFFurnaceContainer extends Container {
 		return this.te.isBurning();
 	}
 
-	public int getCookScaled(int pixels) {
+	public int getCookScaled() {
 		int i = this.furnaceData.get(2);
 		int j = this.furnaceData.get(3);
-		return j != 0 && i != 0 ? i * pixels / j : 0;
+		return j != 0 && i != 0 ? i * 24 / j : 0;
 	}
 
-	public int getBurnLeftScaled(int pixels) {
-		int i = this.furnaceData.get(1);
-		if (i == 0) {
-			i = 200;
-		}
+	@OnlyIn(Dist.CLIENT)
+	public int getBurnLeftScaled() {
+	      int i = this.furnaceData.get(1);
+	      if (i == 0) {
+	         i = 200;
+	      }
 
-		return this.furnaceData.get(0) * pixels / i;
+	      return this.furnaceData.get(0) * 13 / i;
+	   }
+	
+	public boolean matches(IRecipe<? super IInventory> recipeIn) {
+		 return recipeIn.matches(this.furnaceInventory, this.world);
 	}
-
-	@Override
-	public void updateProgressBar(int id, int data) {
-		super.updateProgressBar(id, data);
-		this.te.furnaceData.set(id, data);
-	}
-
 	/**
 	 * Handle when the stack in slot {@code index} is shift-clicked. Normally this
 	 * moves the stack between the player inventory and the other inventory(s).
@@ -169,4 +170,5 @@ public abstract class IFFurnaceContainer extends Container {
 		return this.world.getRecipeManager().getRecipe((IRecipeType) this.recipeType, new Inventory(stack), this.world)
 				.isPresent();
 	}
+
 }

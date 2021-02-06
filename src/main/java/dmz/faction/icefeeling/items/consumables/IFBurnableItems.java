@@ -18,6 +18,9 @@ public class IFBurnableItems extends Item {
 		if(stack.getItem() == IFItems.SOLARIUM.get()) {
 			return burnTime = 12000;
 		}
+		if(stack.getItem() == IFItems.SOLARIUM_FRAGMENT.get()) {
+			return burnTime = 3000;
+		}
 
 		return burnTime;
 	}

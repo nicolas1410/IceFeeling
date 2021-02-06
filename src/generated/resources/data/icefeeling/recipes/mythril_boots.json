@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "icefeeling",
+  "pattern": [
+    "o o",
+    "o o"
+  ],
+  "key": {
+    "o": {
+      "item": "icefeeling:mythril_ingot"
+    }
+  },
+  "result": {
+    "item": "icefeeling:mythril_boots"
+  }
+}

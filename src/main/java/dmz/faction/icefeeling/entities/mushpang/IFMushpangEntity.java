@@ -2,7 +2,6 @@ package dmz.faction.icefeeling.entities.mushpang;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 

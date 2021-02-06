@@ -1,5 +1,6 @@
 package dmz.faction.icefeeling.items;
 
+import dmz.faction.icefeeling.entities.registry.IFEntityRegister;
 import dmz.faction.icefeeling.items.armors.IFArmorBasic;
 import dmz.faction.icefeeling.items.armors.IFArmorMaterial;
 import dmz.faction.icefeeling.items.armors.IFJadeArmor;
@@ -10,6 +11,7 @@ import dmz.faction.icefeeling.items.foods.IFApples;
 import dmz.faction.icefeeling.items.specials.IFKnockerItem;
 import dmz.faction.icefeeling.items.specials.IFLevitorItem;
 import dmz.faction.icefeeling.items.tools.IFEnchantedSword;
+import dmz.faction.icefeeling.items.tools.IFHammer;
 import dmz.faction.icefeeling.items.tools.IFItemTier;
 import dmz.faction.icefeeling.items.tools.IFSwordItem;
 import dmz.faction.icefeeling.mod.Main;
@@ -52,22 +54,37 @@ public class IFItems {
 	public static final RegistryObject<Item> JADE = ITEMS.register("jade", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> OPAL = ITEMS.register("opal", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> FIRE_OPAL = ITEMS.register("fire_opal", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
-	public static final RegistryObject<Item> ENCHANTED_FRAGMENT = ITEMS.register("enchanted_fragment", () -> new Item(new Item.Properties().group(Main.ICEFEELING).rarity(ANCIENT)));
-	public static final RegistryObject<Item> OBSIDIAN_INGOT = ITEMS.register("obsidian_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> MYTHRIL_INGOT = ITEMS.register("mythril_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> TITANITE_INGOT = ITEMS.register("titanite_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	public static final RegistryObject<Item> STEEL_INGOT = ITEMS.register("steel_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+
+	public static final RegistryObject<Item> OBSIDIAN_INGOT = ITEMS.register("obsidian_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> OBSIDIAN_PLATE = ITEMS.register("obsidian_plate", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
-	public static final RegistryObject<Item> ROBUSIUM = ITEMS.register("robusium", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
-	public static final RegistryObject<Item> ROBUSIUM_PLATE = ITEMS.register("robusium_plate", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
-	public static final RegistryObject<Item> ENCHANTED_GEM = ITEMS.register("enchanted_gem", () -> new Item(new Item.Properties().group(Main.ICEFEELING).rarity(MYTHICAL)));
 	public static final RegistryObject<Item> OBSIDIAN_FRAGMENT = ITEMS.register("obsidian_fragment", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> OBSIDIAN_STICK = ITEMS.register("obsidian_stick", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	
 	public static final RegistryObject<Item> IRON_STICK = ITEMS.register("iron_stick", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	public static final RegistryObject<Item> STEEL_STICK = ITEMS.register("steel_stick", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	
+
+	public static final RegistryObject<Item> ROBUSIUM = ITEMS.register("robusium", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	public static final RegistryObject<Item> ROBUSIUM_PLATE = ITEMS.register("robusium_plate", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	
+	public static final RegistryObject<Item> ENCHANTED_FRAGMENT = ITEMS.register("enchanted_fragment", () -> new Item(new Item.Properties().group(Main.ICEFEELING).rarity(ANCIENT)));
+	public static final RegistryObject<Item> ENCHANTED_GEM = ITEMS.register("enchanted_gem", () -> new Item(new Item.Properties().group(Main.ICEFEELING).rarity(MYTHICAL)));
+	
 	public static final RegistryObject<Item> SOLARIUM = ITEMS.register("solarium", () -> new IFBurnableItems(new Item.Properties().group(Main.ICEFEELING)));
+	public static final RegistryObject<Item> SOLARIUM_FRAGMENT = ITEMS.register("solarium_fragment", () -> new IFBurnableItems(new Item.Properties().group(Main.ICEFEELING)));
+	
 	public static final RegistryObject<Item> RESIN = ITEMS.register("resin", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> POKEBALL = ITEMS.register("pokeball", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> POKELAUNCHER = ITEMS.register("pokelauncher", () -> new Item(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1)));
-	//public static final RegistryObject<Item> MUSHPANG_SPAWN_EGG = ITEMS.register("mushpang_egg", () -> new SpawnEggItem(IFEntityRegister.MUSHPANG.get(), 9999878, 454545, (new Item.Properties().group(Main.ICEFEELING))));
+	
+	public static final RegistryObject<Item> MUSHPANG_SPAWN_EGG = ITEMS.register("mushpang_egg", () -> new IFSpawnEggItem(IFEntityRegister.MUSHPANG, 9999878, 454545, (new Item.Properties().group(Main.ICEFEELING))));
+	
+	public static final RegistryObject<Item> XP_FRAGMENT = ITEMS.register("xp_fragment", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+
+	public static final RegistryObject<IFHammer> STEEL_HAMMER = ITEMS.register("steel_hammer", () -> new IFHammer(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1)));
 
 
 	/*------------------------------------------------------ OPAL STUFF ------------------------------------------------------*/

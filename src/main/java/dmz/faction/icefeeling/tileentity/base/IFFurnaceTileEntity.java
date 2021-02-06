@@ -121,7 +121,7 @@ public abstract class IFFurnaceTileEntity extends IFTileEntityInventory
 	}
 
 	public boolean isBurning() {
-		return this.burnTime > 0;
+	    return this.furnaceData.get(0) > 0;
 	}
 
 	@Override

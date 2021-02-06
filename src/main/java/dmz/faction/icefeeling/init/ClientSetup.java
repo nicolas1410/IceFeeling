@@ -7,6 +7,7 @@ import dmz.faction.icefeeling.mod.Main;
 import dmz.faction.icefeeling.tileentity.registry.IFRegistration;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -14,9 +15,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 	
-	
+	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event) {
-		
 		
 	// GUIS
 	ScreenManager.registerFactory(IFRegistration.OBSIDIAN_FURNACE_CONTAINER.get(), IFObsidianFurnaceScreen::new);

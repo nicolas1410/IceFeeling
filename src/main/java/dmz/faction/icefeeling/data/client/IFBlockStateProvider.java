@@ -41,6 +41,16 @@ public class IFBlockStateProvider extends BlockStateProvider {
         simpleBlock(IFBlocks.ROBUSIUM_BLOCK.get());
         makeBlockItemFromExistingModel(IFBlocks.ROBUSIUM_BLOCK.get());
         
+        simpleBlock(IFBlocks.ROBUSIUM_GLASS.get());
+        makeBlockItemFromExistingModel(IFBlocks.ROBUSIUM_GLASS.get());
+        
+        simpleBlock(IFBlocks.STEEL_ORE.get());
+        makeBlockItemFromExistingModel(IFBlocks.STEEL_ORE.get());
+        
+        simpleBlock(IFBlocks.STEEL_BLOCK.get());
+        makeBlockItemFromExistingModel(IFBlocks.STEEL_BLOCK.get());
+        
+        
         
 	}
 	

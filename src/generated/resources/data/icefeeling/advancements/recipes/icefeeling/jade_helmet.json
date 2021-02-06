@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "icefeeling:jade_helmet"
+    ]
+  },
+  "criteria": {
+    "Recipes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "icefeeling:jade"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "icefeeling:jade_helmet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "Recipes",
+      "has_the_recipe"
+    ]
+  ]
+}

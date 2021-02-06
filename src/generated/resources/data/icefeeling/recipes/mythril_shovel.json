@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "icefeeling",
+  "pattern": [
+    "m",
+    "x",
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "icefeeling:iron_stick"
+    },
+    "m": {
+      "item": "icefeeling:mythril_ingot"
+    }
+  },
+  "result": {
+    "item": "icefeeling:mythril_shovel"
+  }
+}

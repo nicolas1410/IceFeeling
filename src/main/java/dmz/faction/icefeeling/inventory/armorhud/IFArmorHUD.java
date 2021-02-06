@@ -15,13 +15,20 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+//@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IFArmorHUD extends IngameGui {
 
-	public final int[][] armorPosX = new int[][] { { -136, -136, 119, 119, 119, -136, 119, -136 },
-			{ -119, -119, 94, 94, 94, -119, 94, -138 } };
-
-	private final int[] armorPosY = new int[] { -56, -38, -56, -38, -74, -74, -20, -20 };
+	public final int[][] armorPosX = new int[][] { { -136, -136, 136, 136, 136, -136, 119},
+			{ -136, -136, 136, 136, 136, -136, 136, -136 } };
+											/*
+											 * 1 = HELMET
+											 * 2 = CHESTPLATE
+											 * 3 = LEGGINGS
+											 * 4 = BOOTS
+											 * 5 = SHIELD
+											 * 6 = SWORD
+											 */
+	private final int[] armorPosY = new int[] { -164, -152, -140, -128, -116, -104 };
 
 	public static String[] armorTextures = new String[] { "textures/item/empty_armor_slot_helmet.png",
 			"textures/item/empty_armor_slot_chestplate.png", "textures/item/empty_armor_slot_leggings.png",
@@ -40,23 +47,12 @@ public class IFArmorHUD extends IngameGui {
 	public enum ArmorDamage {
 		DAMAGE;
 	}
-
 	public enum ArmorType {
 		ARMOR;
 	}
 
-	public enum VerticalAlignment {
-		TOP, CENTER, BOTTOM;
-	}
-
-	public enum HorizontalAlignment {
-		LEFT, MIDDLE, RIGHT;
-	}
-
 	public static ArmorDamage armDamage;
 	public static ArmorType armType;
-	public static VerticalAlignment vAlignement;
-	public static HorizontalAlignment hAlignement;
 
 	public IFArmorHUD() {
 		super(Minecraft.getInstance());
@@ -71,8 +67,8 @@ public class IFArmorHUD extends IngameGui {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
 		MatrixStack mat = new MatrixStack();
-		int width = this.mc.getMainWindow().getScaledWidth();
-		int height = this.mc.getMainWindow().getScaledHeight();
+		int width = this.mc.getMainWindow().getWidth();
+		int height = this.mc.getMainWindow().getHeight();
 		RenderArmorStatus(mat, width, height);
 
 	}
@@ -83,76 +79,62 @@ public class IFArmorHUD extends IngameGui {
 			RenderSystem.pushMatrix();
 			RenderSystem.translated(0.0D, 0.0D, -255.0D);
 			for (ItemStack item : this.mc.player.getEquipmentAndArmor()) {
-				if (armType == ArmorType.ARMOR && i > 3) 
-				{
+				if (armType == ArmorType.ARMOR && i > 3) {
 					i--;
 					continue;
 				}
-					int Damage = IFArmorStatus.GetItemDamage(item);
-					if (Damage >= 0) {
-						String p, text = "";
-						int xp = width / 2 + this.armorPosX[1][i];
+				int Damage = IFArmorStatus.GetItemDamage(item);
+				if (Damage >= 0) {
+					String p, text = "";
+					int xp = width / 2 + this.armorPosX[1][i];
+					p = String.valueOf(item.getMaxDamage() - item.getDamage());
+					text = getDamageText(p, Damage);
+					xp += 23 - p.length() * 6;
 
-						p = String.valueOf(item.getDamage());
-						text = getDamageText(p, Damage);
-						switch (i) {
-						case 2:
-						case 3:
-						case 4:
-							xp += 23 - p.length() * 6;
-							break;
-						}
 
-						this.itemRenderer.renderItemAndEffectIntoGUI(item, width / 2 + this.armorPosX[0][i],
-								height + this.armorPosY[i]);
-
-						this.fontRenderer.drawStringWithShadow(mat, text, xp, (height + this.armorPosY[i] + 4),
-								16777215);
-
-						if (i == 5) {
-							this.mc.getTextureManager()
-									.bindTexture(new ResourceLocation("icefeeling", armorTextures[i]));
-
-							blit(mat, width / 2 + this.armorPosX[0][i], height + this.armorPosY[i], 16.0F, 16.0F, 16,
-									16, 16, 16);
-						}
-						i--;
-					}
-					
-					
-					RenderSystem.popMatrix();
+					this.itemRenderer.renderItemAndEffectIntoGUI(item, width + this.armorPosX[0][i], height + this.armorPosY[i]);
+					this.fontRenderer.drawStringWithShadow(mat, text, xp, (height + this.armorPosY[i]), 16777215);
+					//blit(mat, width / 2 + this.armorPosX[0][i], height + this.armorPosY[i], 16.0F, 16.0F, 16, 16, 16, 16);
 					
 				}
 
+				if (i == 5) {
+					this.mc.getTextureManager().bindTexture(new ResourceLocation("icefeeling", armorTextures[i]));
 
-		
-			} else { 
-				
+				}
+				i--;
+
+			}
+			RenderSystem.popMatrix();
+
+		} else
+
+		{
+
 			int x = 0;
-	      int y = 0;
-	      boolean right = false;
-	     
-	          x = width / 2 - 45 - armX;
-	          if (armX > 0)
-	            right = true; 
-	        
-	       
-	      if (x < 0) {
-	        x = 0;
-	      } else if (x > width - 90) {
-	        x = width - 90;
-	      } 
-	      if (y < 0) {
-	        y = 0;
-	      } else if (y > height - 70) {
-	        y = height - 70;
-	      } 
+			int y = 0;
+			boolean right = false;
+
+			x = width / 2 - 45 - armX;
+			if (armX > 0)
+				right = true;
+
+			if (x < 0) {
+				x = 0;
+			} else if (x > width - 90) {
+				x = width - 90;
+			}
+			if (y < 0) {
+				y = 0;
+			} else if (y > height - 70) {
+				y = height - 70;
+			}
 			RenderSystem.pushMatrix();
 			RenderSystem.translated(x, y, -320.0D);
 			renderItemInArmorSlot(mat, 0, 0, right);
 			RenderSystem.popMatrix();
-		}
 
+		}
 
 	}
 
@@ -169,14 +151,11 @@ public class IFArmorHUD extends IngameGui {
 			if (Damage >= 0) {
 				String p, text = "";
 				int tLength = -17;
-				switch (armDamage) {
-				case DAMAGE:
-					p = String.valueOf(item.getDamage());
-					text = getDamageText(p, Damage);
-					if (right)
-						tLength = p.length() * 6 + 1;
-					break;
-				}
+				p = String.valueOf(item.getDamage());
+				text = getDamageText(p, Damage);
+				if (right)
+					tLength = p.length() * 6 + 1;
+	
 				if (i == 5) {
 					this.itemRenderer.renderItemAndEffectIntoGUI(item, xpos + xOffset + xOffset2, ypos);
 					this.fontRenderer.drawStringWithShadow(mat, text, (xpos - tLength + xOffset + xOffset2), (ypos + 4),
@@ -206,15 +185,15 @@ public class IFArmorHUD extends IngameGui {
 	}
 
 	private String getDamageText(String damageDisplayed, int damageItem) {
-
+		
 		String result = damageDisplayed;
-		if (damageItem == 100) {
+		if (damageItem >= 100) {
 			result = TextFormatting.GREEN + result;
-		} else if (damageItem < 1) {
+		} else if (damageItem < 50) {
 			result = TextFormatting.DARK_RED + result;
-		} else if (damageItem <= 50) {
-			result = TextFormatting.RED + result;
 		} else if (damageItem <= 100) {
+			result = TextFormatting.RED + result;
+		} else if (damageItem <= 150) {
 			result = TextFormatting.GOLD + result;
 		} else if (damageItem <= 200) {
 			result = TextFormatting.YELLOW + result;

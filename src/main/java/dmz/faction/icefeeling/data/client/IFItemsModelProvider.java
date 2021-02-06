@@ -36,8 +36,12 @@ public class IFItemsModelProvider extends ItemModelProvider
 	        builder(itemGenerated, "solarium"); 
 	        builder(itemGenerated, "robusium_plate"); 
 	        builder(itemGenerated, "robusium"); 
+	        builder(itemGenerated, "obsidian_fragment");
+	        builder(itemGenerated, "steel_stick");
+	        builder(itemGenerated, "steel_hammer");
+	        builder(itemGenerated, "steel_ingot");
 
-	        
+
 	        builder(itemGenerated, "iron_stick"); 
 	        builder(itemGenerated, "obsidian_stick"); 
 

@@ -4,6 +4,7 @@ import dmz.faction.icefeeling.entities.chargedtnt.IFChargedTNTEntity;
 import dmz.faction.icefeeling.entities.chargedtnt.IFChargedTNTRenderer;
 import dmz.faction.icefeeling.entities.icetnt.IFIceTNTEntity;
 import dmz.faction.icefeeling.entities.icetnt.IFIceTNTRenderer;
+import dmz.faction.icefeeling.entities.invasion.zombies.ChargedZombie;
 import dmz.faction.icefeeling.entities.mushpang.IFMushpangEntity;
 import dmz.faction.icefeeling.entities.mushpang.IFMushpangEntityRenderer;
 import dmz.faction.icefeeling.mod.Main;
@@ -51,10 +52,17 @@ public class IFEntityRegister {
 	public static final RegistryObject<EntityType<IFMushpangEntity>> MUSHPANG = ENTITIES.register("mushpang_entity", 
  			() -> EntityType.Builder.<IFMushpangEntity>create(IFMushpangEntity::new, EntityClassification.CREATURE)
  			.size(1.5F, 1.5F)
- 			.build("mushpang"));
+ 			.build("mushpang_entity"));
 	
-
 	
+	
+	/*------------------------------------------------------ CHARGED_ZOMBIE ------------------------------------------------------*/
+	
+	public static final RegistryObject<EntityType<ChargedZombie>> CHARGED_ZOMBIE = ENTITIES.register("charged_zombie_entity", 
+ 			() -> EntityType.Builder.<ChargedZombie>create(ChargedZombie::new, EntityClassification.MONSTER)
+ 			.size(0.6F, 1.95F)
+ 			.trackingRange(16)
+ 			.build("charged_zombie_entity"));
 	
 	
 	
@@ -68,7 +76,7 @@ public class IFEntityRegister {
 	public static void registerGlobalEntityAttributes()
 	{
 		GlobalEntityTypeAttributes.put(IFEntityRegister.MUSHPANG.get(), IFMushpangEntity.registerAttributes().create());
-
+		GlobalEntityTypeAttributes.put(IFEntityRegister.CHARGED_ZOMBIE.get(), ChargedZombie.registerAttributes().create());
 	}
 
 	
