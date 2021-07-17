@@ -7,32 +7,40 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableSet;
 
+import dmz.faction.icefeeling.items.IFItems;
 import dmz.faction.icefeeling.mod.Main;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ToolType;
 
 public class IFHammer extends Item {
- 
-	public static final ToolType HAMMER_TOOL = ToolType.get(Main.MOD_ID+"_hammer");
 
-	
+	public static final ToolType HAMMER_TOOL = ToolType.get(Main.MOD_ID + "_hammer");
+
 	public IFHammer(Properties properties) {
-		super(properties.maxDamage(100));
+		super(properties);
 	}
-	
+
+	@Override
+	public boolean hasEffect(ItemStack stack) {
+		if (stack.getItem() == IFItems.ENCHANTED_BOTTLE.get()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Nonnull
 	@Override
-	public ItemStack getContainerItem(@Nonnull ItemStack stack)
-	{
+	public ItemStack getContainerItem(@Nonnull ItemStack stack) {
 		Random rand = new Random();
 		ItemStack container = stack.copy();
-		if(container.attemptDamageItem(1, rand, null))
-			return ItemStack.EMPTY;	
+		if (container.attemptDamageItem(1, rand, null))
+			return ItemStack.EMPTY;
 		else
 			return container;
 	}
-	
+
 	@Override
 	public boolean hasContainerItem() {
 		return true;
@@ -40,14 +48,12 @@ public class IFHammer extends Item {
 
 	@Nonnull
 	@Override
-	public Set<ToolType> getToolTypes(ItemStack stack)
-	{
+	public Set<ToolType> getToolTypes(ItemStack stack) {
 		return ImmutableSet.of(HAMMER_TOOL);
 	}
-	
+
 	@Override
-	public boolean isDamageable()
-	{
+	public boolean isDamageable() {
 		return true;
 	}
 

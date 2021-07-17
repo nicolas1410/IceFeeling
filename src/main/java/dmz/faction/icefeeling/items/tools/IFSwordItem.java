@@ -20,94 +20,85 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class IFSwordItem extends SwordItem {
-	
+
 	public IFSwordItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn) {
 		super(tier, attackDamageIn, attackSpeedIn, builderIn);
-		
+
 	}
-	
+
 	// Set on fire entitites for 10 seconds on hit, only on FIRE OPAL SWORD
 	@Override
-	public boolean hitEntity(final ItemStack stack, final LivingEntity target, final LivingEntity attacker) 
-	{
-		if(target.getFireTimer() <= 0) 
-		{
-			if(stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) 
-			{
-				if(attacker instanceof PlayerEntity) 
-				{ target.setFire(10); }
-					} else { return false; }
+	public boolean hitEntity(final ItemStack stack, final LivingEntity target, final LivingEntity attacker) {
+
+		if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
+			if (attacker instanceof PlayerEntity) {
+				target.setFire(10);
+			}
+		} else {
+			return false;
 		}
-		
-	stack.damageItem(1, attacker, (entity) -> {
-	           entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
-	        }); return true;
-	}
-	
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-	    if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) 
-	    {
-	        return false;
-	        
-	    } else {
-	         return !stack.isEnchanted();
-	      }
-	}
-	 
-	
-	@Override
-	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) 
-	{
-		 if(toRepair.getItem() == IFItems.FIRE_OPAL_SWORD.get()) 
-		 {
-			 return false;
-		 }
-		 
-	     return this.getTier().getRepairMaterial().test(repair) || super.getIsRepairable(toRepair, repair);
-	}
-	
-	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book)
-	{
-		if(stack.getItemEnchantability() == 0) 
-		{
-			return false; 
-	    }
-		
+
+		stack.damageItem(1, attacker, (entity) -> {
+			entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+		});
 		return true;
 	}
-	  
+
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
+			return false;
+
+		} else {
+			return !stack.isEnchanted();
+		}
+	}
+
+	@Override
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+		if (toRepair.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
+			return false;
+		}
+
+		return this.getTier().getRepairMaterial().test(repair) || super.getIsRepairable(toRepair, repair);
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		if (stack.getItemEnchantability() == 0) {
+			return false;
+		}
+
+		return true;
+	}
+
 	@Override
 	public boolean hasEffect(ItemStack stack) {
-		
-		if(stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) 
-		{
+
+		if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
 			return true;
-		
-		} else if (stack.isEnchanted()){
-				  return true;
-			  }
+
+		} else if (stack.isEnchanted()) {
+			return true;
+		}
 		return false;
 	}
-	
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) 
-	{
-		
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
+			ITooltipFlag flagIn) {
+
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		
-		if(stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) 
-		{
-			tooltip.add(new StringTextComponent("Fire Aspect II").mergeStyle(TextFormatting.GRAY));		
+
+		if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
+			tooltip.add(new StringTextComponent("Fire Aspect II").mergeStyle(TextFormatting.GRAY));
 		}
 
 	}
-	
+
 	@Override
-	public float getXpRepairRatio(ItemStack stack)
-	{
-	       return 0F;
+	public float getXpRepairRatio(ItemStack stack) {
+		return 0F;
 	}
 }

@@ -2,7 +2,7 @@ package dmz.faction.icefeeling.entities.icetnt;
 
 import javax.annotation.Nullable;
 
-import dmz.faction.icefeeling.entities.registry.IFEntityRegister;
+import dmz.faction.icefeeling.mod.registry.IFEntityRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -31,8 +31,8 @@ public class IFIceTNTEntity extends Entity {
 	private int fuse_charged = 40;
 	LivingEntity tntPlacedBy;
 
-	public IFIceTNTEntity(EntityType<? extends IFIceTNTEntity> chargedTntEntity, World worldIn) {
-		super(chargedTntEntity, worldIn);
+	public IFIceTNTEntity(EntityType<? extends IFIceTNTEntity> iceTntEntity, World worldIn) {
+		super(iceTntEntity, worldIn);
 		this.preventEntitySpawning = true;
 	}
 

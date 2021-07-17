@@ -50,6 +50,11 @@ public class IFBlockStateProvider extends BlockStateProvider {
         simpleBlock(IFBlocks.STEEL_BLOCK.get());
         makeBlockItemFromExistingModel(IFBlocks.STEEL_BLOCK.get());
         
+        simpleBlock(IFBlocks.XP_ORE.get());
+        makeBlockItemFromExistingModel(IFBlocks.XP_ORE.get());
+        
+        
+        
         
         
 	}

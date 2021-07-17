@@ -32,7 +32,7 @@ public enum IFArmorMaterial implements IArmorMaterial {
 		return Ingredient.fromItems(IFItems.OPAL.get());
 	});
 	
-		//NETHERITE("netherite", 37, new int[]{3, 6, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0F, 0.1F, () -> { 20
+	//NETHERITE("netherite", 37, new int[]{3, 6, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0F, 0.1F, () -> { 20
 		 
 
 	private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};

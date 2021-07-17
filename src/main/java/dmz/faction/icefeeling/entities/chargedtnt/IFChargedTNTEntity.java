@@ -2,7 +2,7 @@ package dmz.faction.icefeeling.entities.chargedtnt;
 
 import javax.annotation.Nullable;
 
-import dmz.faction.icefeeling.entities.registry.IFEntityRegister;
+import dmz.faction.icefeeling.mod.registry.IFEntityRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;

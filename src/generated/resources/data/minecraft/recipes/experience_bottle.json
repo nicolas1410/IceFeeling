@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "icefeeling",
+  "pattern": [
+    "XBX",
+    "VXV",
+    "GEG"
+  ],
+  "key": {
+    "B": {
+      "item": "icefeeling:enchanted_bottle"
+    },
+    "X": {
+      "item": "icefeeling:xp_fragment"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "V": {
+      "item": "minecraft:glass"
+    },
+    "E": {
+      "item": "minecraft:emerald"
+    }
+  },
+  "result": {
+    "item": "minecraft:experience_bottle"
+  }
+}

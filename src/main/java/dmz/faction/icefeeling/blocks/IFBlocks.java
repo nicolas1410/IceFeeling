@@ -2,25 +2,34 @@ package dmz.faction.icefeeling.blocks;
 
 import java.util.function.Supplier;
 
+import dmz.faction.icefeeling.blocks.blockgui.IFIronFurnaceBlock;
+import dmz.faction.icefeeling.blocks.blockgui.IFObsidianFurnaceBlock;
+import dmz.faction.icefeeling.blocks.blockgui.IFSingleItemChestBlock;
+import dmz.faction.icefeeling.blocks.blockgui.IFTrashCanBlock;
+import dmz.faction.icefeeling.blocks.blockgui.abstracts.IFCommonItemFilterBlock;
+import dmz.faction.icefeeling.blocks.flowers.IFMagicFlower;
+import dmz.faction.icefeeling.blocks.flowers.IFPoisonFlower;
+import dmz.faction.icefeeling.blocks.flowers.IFSlownessFlower;
+import dmz.faction.icefeeling.blocks.robusium.IFRobusiumBlock;
+import dmz.faction.icefeeling.blocks.robusium.IFRobusiumGlassBlock;
+import dmz.faction.icefeeling.blocks.tnts.IFChargedTNTBock;
+import dmz.faction.icefeeling.blocks.tnts.IFIceTNTBlock;
+import dmz.faction.icefeeling.blocks.tnts.IFLavaTNTBlock;
 import dmz.faction.icefeeling.items.IFItems;
 import dmz.faction.icefeeling.mod.Main;
-import dmz.faction.icefeeling.tileentity.base.IFFurnaceTileEntity;
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.WitherRoseBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import tests.multiblocks.IFBlockMulti;
 
 public class IFBlocks {
 
@@ -69,6 +78,11 @@ public class IFBlocks {
 			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().harvestLevel(4).hardnessAndResistance(3, 9)));
 	
 	
+	public static final RegistryObject<Block> ENDER_ORE = registerBlockWithDefaultItem("ender_ore", () 
+			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().harvestLevel(4).hardnessAndResistance(3, 9)));
+	
+	
+	
 	/* ----------------------------------------------- BLOCKS ----------------------------------------------- */
 
 	
@@ -92,6 +106,10 @@ public class IFBlocks {
     
 	/* ----------------------------------------------- TNT ----------------------------------------------- */
 
+    
+    public static final RegistryObject<Block> LAVA_TNT = registerBlockWithDefaultItem("lava_tnt", () 
+    		-> new IFLavaTNTBlock(AbstractBlock.Properties.create(Material.TNT).sound(SoundType.SCAFFOLDING).setLightLevel((state) -> {
+  		      return 5;})));
     
     public static final RegistryObject<Block> CHARGED_TNT = registerBlockWithDefaultItem("charged_tnt", () 
     		-> new IFChargedTNTBock(AbstractBlock.Properties.create(Material.TNT).sound(SoundType.SCAFFOLDING).setLightLevel((state) -> {
@@ -117,12 +135,27 @@ public class IFBlocks {
 	/* ----------------------------------------------- TEST AREA 51 ZONE ----------------------------------------------- */
 
     
-    public static final RegistryObject<IFPoisonFlower> ENCHANTED_BLOCK = registerBlockWithDefaultItem("enchanted_block", () 
-    		-> new IFPoisonFlower(Effects.POISON, 10, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)));
+    public static final RegistryObject<IFBlockMulti> ENCHANTED_BLOCK = registerBlockWithDefaultItem("enchanted_block", () 
+    		-> new IFBlockMulti(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE)));
     
-
-    public static final RegistryObject<IFObsidianFurnaceBlock> OBSIDIAN_FURNACE = registerBlockWithDefaultItem("obsidian_furnace_block", () 
-    		-> new IFObsidianFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL)));
+    public static final RegistryObject<IFIronFurnaceBlock> IRON_FURNACE = registerBlockWithDefaultItem("iron_furnace", () 
+    		-> new IFIronFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL).hardnessAndResistance(3, 9)));
+    
+    public static final RegistryObject<IFObsidianFurnaceBlock> OBSIDIAN_FURNACE = registerBlockWithDefaultItem("obsidian_furnace", () 
+    		-> new IFObsidianFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL).hardnessAndResistance(3, 9)));
+    
+    
+    public static final RegistryObject<IFCommonItemFilterBlock> COMMON_ITEM_FILTER = registerBlockWithDefaultItem("common_item_filter", () 
+    		-> new IFCommonItemFilterBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL)));
+    
+    
+    public static final RegistryObject<IFSingleItemChestBlock> SINGLE_ITEM_CHEST_BIG = registerBlockWithDefaultItem("single_item_chest_big", () 
+    		-> new IFSingleItemChestBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL)));
+ 
+    
+    public static final RegistryObject<IFTrashCanBlock> TRASH_CAN = registerBlockWithDefaultItem("trash_can", () 
+    		-> new IFTrashCanBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.SLIME)));
+    
     
     
 	/* ----------------------------------------------- REGISTERING ----------------------------------------------- */

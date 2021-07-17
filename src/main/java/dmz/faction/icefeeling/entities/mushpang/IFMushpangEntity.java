@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import dmz.faction.icefeeling.entities.registry.IFEntityRegister;
 import dmz.faction.icefeeling.items.IFItems;
+import dmz.faction.icefeeling.mod.registry.IFEntityRegister;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IAngerable;

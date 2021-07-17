@@ -12,8 +12,7 @@ import net.minecraftforge.fml.RegistryObject;
 public class IFSpawnEggItem extends SpawnEggItem {
 	private final Lazy<? extends EntityType<?>> entityTypeSupplier;
 
-	public IFSpawnEggItem(RegistryObject<? extends EntityType<?>> entityTypeSupplier, int primaryColorIn,
-			int secondaryColorIn, Item.Properties builder) {
+	public IFSpawnEggItem(RegistryObject<? extends EntityType<?>> entityTypeSupplier, int primaryColorIn, int secondaryColorIn, Item.Properties builder) {
 		super(null, primaryColorIn, secondaryColorIn, builder);
 		this.entityTypeSupplier = Lazy.of(entityTypeSupplier::get);
 	}

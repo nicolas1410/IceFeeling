@@ -1,6 +1,11 @@
 {
 
 	"itemGroup.icefeeling": "IceFeeling",
+	"menu.server": "IceFeeling",
+	
+	"item.icefeeling.sans_coeur": "Sans Coeur",
+	"item.icefeeling.sans_coeur.desc": "Sans Coeur",
+	
 		
 	"item.icefeeling.jade": "Jade",
 	"item.icefeeling.opal": "Opal",
@@ -11,11 +16,18 @@
 	"item.icefeeling.enchanted_gem": "Enchanted Gem",
 	"item.icefeeling.mythril_ingot": "Mythril Ingot",
 	"item.icefeeling.titanite_ingot": "Titanite Ingot",
+	"item.icefeeling.ender_dust": "Ender Dust",
+	"item.icefeeling.ender": "Ender",
+	
+	"item.icefeeling.steel_ingot": "Steel Ingot",
+	
 	"item.icefeeling.opal_apple": "Opal Apple",
 	"item.icefeeling.jade_apple": "Jade Apple",
 	"item.icefeeling.obsidian_apple": "Obsidian Apple",
 	"item.icefeeling.golden_apple": "Golden Apple",
 	"item.icefeeling.notch_apple": "Notch Apple",
+	"item.icefeeling.fire_opal_apple": "Fire Opal Apple",
+	
 	"item.icefeeling.obsidian_plate": "Obsidian Plate",
 	"item.icefeeling.obsidian_ingot": "Obsidian Ingot",
 	"item.icefeeling.obsidian_fragment": "Obsidian Fragment",
@@ -25,7 +37,10 @@
 	"item.icefeeling.robusium": "Robusium",
 	"item.icefeeling.robusium_plate": "Robusium Plate",
 	"item.icefeeling.solarium": "Solarium",
+	
 	"item.icefeeling.iron_stick": "Iron Stick",
+	"item.icefeeling.ender_stick": "Ender Stick",
+	"item.icefeeling.steel_stick": "Steel Stick",
 
 	
 	"item.icefeeling.admin_sword": "Admin Sword",
@@ -87,18 +102,32 @@
 	"block.icefeeling.titanite_ore": "Titanite Ore",
 	"block.icefeeling.robusium_ore": "Robusium Ore",
 	"block.icefeeling.solarium_ore": "Solarium Ore",
-	"block.icefeeling.robusium_block": "Robusium Block",
-	"block.icefeeling.compressed_cobble": "Compressed Cobble",
 	"block.icefeeling.fire_opal_ore": "Fire Opal Ore",
 	"block.icefeeling.opal_ore_nether": "Opal Ore",
+	"block.icefeeling.ender_ore": "Ender Ore",
+	
+	"block.icefeeling.robusium_block": "Robusium Block",
+	"block.icefeeling.compressed_cobble": "Compressed Cobble",
+
 	"block.icefeeling.ice_tnt": "Ice TNT",
 	"block.icefeeling.charged_tnt": "Charged TNT",
+	"block.icefeeling.common_item_filter": "Common Filter",
+	"block.icefeeling.obsidian_furnace": "Obsidian Furnace",
+
 	
 	
-	
+	"entity.icefeeling.charged_zombie_entity": "Charged Zombie",
 	"entity.icefeeling.mushpang_entity": "Mushpang",
+	"entity.icefeeling.meteor_head_entity": "Meteor Head",
 	
-	"container.icefeeling.obsidian_furnace": "Obsidian Furnace"
+	
+	"container.icefeeling.obsidian_furnace": "Obsidian Furnace",
+	"container.icefeeling.single_item_chest_big": "Big Chest",
+	"container.icefeeling.trash_can": "Trash Can",
+	"container.icefeeling.common_item_filter": "Common Filter"
+	
+
+	
 	
 	
 

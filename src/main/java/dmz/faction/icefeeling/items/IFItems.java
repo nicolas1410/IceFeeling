@@ -1,6 +1,5 @@
 package dmz.faction.icefeeling.items;
 
-import dmz.faction.icefeeling.entities.registry.IFEntityRegister;
 import dmz.faction.icefeeling.items.armors.IFArmorBasic;
 import dmz.faction.icefeeling.items.armors.IFArmorMaterial;
 import dmz.faction.icefeeling.items.armors.IFJadeArmor;
@@ -8,6 +7,7 @@ import dmz.faction.icefeeling.items.armors.IFObsidianArmor;
 import dmz.faction.icefeeling.items.armors.IFOpalArmor;
 import dmz.faction.icefeeling.items.consumables.IFBurnableItems;
 import dmz.faction.icefeeling.items.foods.IFApples;
+import dmz.faction.icefeeling.items.foods.IFFireOpalApple;
 import dmz.faction.icefeeling.items.specials.IFKnockerItem;
 import dmz.faction.icefeeling.items.specials.IFLevitorItem;
 import dmz.faction.icefeeling.items.tools.IFEnchantedSword;
@@ -15,14 +15,19 @@ import dmz.faction.icefeeling.items.tools.IFHammer;
 import dmz.faction.icefeeling.items.tools.IFItemTier;
 import dmz.faction.icefeeling.items.tools.IFSwordItem;
 import dmz.faction.icefeeling.mod.Main;
+import dmz.faction.icefeeling.mod.registry.IFEntityRegister;
+import dmz.faction.icefeeling.world.IFModSoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.Food;
 import net.minecraft.item.Item;
+import net.minecraft.item.MusicDiscItem;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.Rarity;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.RegistryObject;
@@ -42,12 +47,14 @@ public class IFItems {
 	/*------------------------------------------------------ TO DELETE ------------------------------------------------------*/
 	
 	public static final RegistryObject<Item> ADMIN_SWORD = ITEMS.register("admin_sword", () -> 
-	new SwordItem(IFItemTier.ADMIN_SWORD, 1000, 20, new Item.Properties().group(Main.ICEFEELING).rarity(ADMIN)));
+	new SwordItem(IFItemTier.ADMIN_SWORD, 1000, 24, new Item.Properties().group(Main.ICEFEELING).rarity(ADMIN)));
 	
 	/*------------------------------------------------------ SPECIALS ------------------------------------------------------*/
 
 	public static final RegistryObject<Item> KNOCKER = ITEMS.register("knocker", () -> new IFKnockerItem(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1).rarity(ANCIENT)));
 	public static final RegistryObject<Item> LEVITATOR = ITEMS.register("levitator", () -> new IFLevitorItem(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1).rarity(ANCIENT)));
+	public static final RegistryObject<Item> LIGHTNING_JAR = ITEMS.register("lightning_jar", () -> new Item(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1).rarity(LEGENDARY)));
+
 	
 	/*------------------------------------------------------ GENERAL ------------------------------------------------------*/		
 	
@@ -57,6 +64,9 @@ public class IFItems {
 	public static final RegistryObject<Item> MYTHRIL_INGOT = ITEMS.register("mythril_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> TITANITE_INGOT = ITEMS.register("titanite_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> STEEL_INGOT = ITEMS.register("steel_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	public static final RegistryObject<Item> ENDER_DUST = ITEMS.register("ender_dust", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	public static final RegistryObject<Item> ENDER = ITEMS.register("ender", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+
 
 	public static final RegistryObject<Item> OBSIDIAN_INGOT = ITEMS.register("obsidian_ingot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> OBSIDIAN_PLATE = ITEMS.register("obsidian_plate", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
@@ -65,7 +75,7 @@ public class IFItems {
 	
 	public static final RegistryObject<Item> IRON_STICK = ITEMS.register("iron_stick", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> STEEL_STICK = ITEMS.register("steel_stick", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
-	
+	public static final RegistryObject<Item> ENDER_STICK = ITEMS.register("ender_stick", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 
 	public static final RegistryObject<Item> ROBUSIUM = ITEMS.register("robusium", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> ROBUSIUM_PLATE = ITEMS.register("robusium_plate", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
@@ -74,7 +84,6 @@ public class IFItems {
 	public static final RegistryObject<Item> ENCHANTED_GEM = ITEMS.register("enchanted_gem", () -> new Item(new Item.Properties().group(Main.ICEFEELING).rarity(MYTHICAL)));
 	
 	public static final RegistryObject<Item> SOLARIUM = ITEMS.register("solarium", () -> new IFBurnableItems(new Item.Properties().group(Main.ICEFEELING)));
-	public static final RegistryObject<Item> SOLARIUM_FRAGMENT = ITEMS.register("solarium_fragment", () -> new IFBurnableItems(new Item.Properties().group(Main.ICEFEELING)));
 	
 	public static final RegistryObject<Item> RESIN = ITEMS.register("resin", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> POKEBALL = ITEMS.register("pokeball", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
@@ -84,7 +93,9 @@ public class IFItems {
 	
 	public static final RegistryObject<Item> XP_FRAGMENT = ITEMS.register("xp_fragment", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 
-	public static final RegistryObject<IFHammer> STEEL_HAMMER = ITEMS.register("steel_hammer", () -> new IFHammer(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1)));
+	public static final RegistryObject<IFHammer> STEEL_HAMMER = ITEMS.register("steel_hammer", () -> new IFHammer(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1).maxDamage(100)));
+	public static final RegistryObject<IFHammer> ENCHANTED_BOTTLE = ITEMS.register("enchanted_bottle", () -> new IFHammer(new Item.Properties().group(Main.ICEFEELING).maxStackSize(1).maxDamage(320).rarity(ANCIENT)));
+
 
 
 	/*------------------------------------------------------ OPAL STUFF ------------------------------------------------------*/
@@ -94,7 +105,7 @@ public class IFItems {
 	public static final RegistryObject<Item> OPAL_SHOVEL = ITEMS.register("opal_shovel", () -> new ShovelItem(IFItemTier.OPAL, -1.5F, -3.0F, new Item.Properties().group(Main.ICEFEELING).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> OPAL_SWORD = ITEMS.register("opal_sword", () -> new IFSwordItem(IFItemTier.OPAL, 0, 26, new Item.Properties().group(Main.ICEFEELING).rarity(Rarity.RARE)));
 	
-	public static final RegistryObject<Item> FIRE_OPAL_SWORD = ITEMS.register("fire_opal_sword", () -> new IFSwordItem(IFItemTier.FIRE_OPAL, 0, 26, new Item.Properties().group(Main.ICEFEELING).setNoRepair().isImmuneToFire().rarity(LEGENDARY)));
+	public static final RegistryObject<Item> FIRE_OPAL_SWORD = ITEMS.register("fire_opal_sword", () -> new IFSwordItem(IFItemTier.FIRE_OPAL, 0, 46, new Item.Properties().group(Main.ICEFEELING).setNoRepair().isImmuneToFire().rarity(LEGENDARY)));
 	
 	public static final RegistryObject<Item> ENCHANTED_DAGGER = ITEMS.register("enchanted_dagger", () -> new IFEnchantedSword(IFItemTier.ENCHANTED_SWORD, 0, 26, new Item.Properties().group(Main.ICEFEELING).setNoRepair().isImmuneToFire().rarity(LEGENDARY)));
 	
@@ -152,22 +163,27 @@ public class IFItems {
 	public static final RegistryObject<ArmorItem> OBSIDIAN_BOOTS = ITEMS.register("obsidian_boots", () -> new IFObsidianArmor(IFArmorMaterial.OBSIDIAN, EquipmentSlotType.FEET, new Item.Properties().group(Main.ICEFEELING)));
 	
 	/*------------------------------------------------------ FOOD ------------------------------------------------------*/
+	public static final RegistryObject<Item> FIRE_OPAL_APPLE = ITEMS.register("fire_opal_apple", () -> new IFFireOpalApple(new Item.Properties(), Rarity.EPIC));
 	
 	public static final RegistryObject<Item> OPAL_APPLE = ITEMS.register("opal_apple", () -> new IFApples(new Item.Properties(), 
-			Effects.ABSORPTION, 2400, 0, 1.0F, 
-			Effects.FIRE_RESISTANCE, 4800, 0, 1.0F, 
+			Effects.ABSORPTION, 2400, 1, 1.0F, 
+			Effects.FIRE_RESISTANCE, 6000, 0, 1.0F, 
 			Effects.REGENERATION, 400, 1, 1.0F, 
 			Effects.RESISTANCE, 6000, 0, 1, Rarity.EPIC 
 			));
+	
 	public static final RegistryObject<Item> OBSIDIAN_APPLE = ITEMS.register("obsidian_apple", () -> new IFApples(new Item.Properties(), 
-			Effects.ABSORPTION, 2400, 0, 1.0F, 
+			Effects.ABSORPTION, 2400, 1, 1.0F, 
 			Effects.FIRE_RESISTANCE, 9600, 0, 1.0F, 
 			Effects.SLOWNESS, 9600, 0, 1.0F, 
-			Effects.RESISTANCE, 6000, 2, 2.0F, Rarity.COMMON
+			Effects.RESISTANCE, 6000, 2, 1.0F, 
+			Effects.SLOWNESS, 6000, 0, 1.0F,
+			Rarity.EPIC
 			));
+	
 	public static final RegistryObject<Item> JADE_APPLE = ITEMS.register("jade_apple", () -> new IFApples(new Item.Properties(), 
 			Effects.SPEED, 4800, 0, 1.0F, 
-			Effects.FIRE_RESISTANCE, 4800, 0, 1.0F, 
+			Effects.FIRE_RESISTANCE, 6000, 0, 1.0F, 
 			Effects.HASTE, 2400, 0, 1.0F, 
 			Effects.HUNGER, 4800, 0, 1.0F, Rarity.COMMON 
 			));
@@ -176,5 +192,16 @@ public class IFItems {
 	public static final RegistryObject<Item> CUPCAKE = ITEMS.register("cupcake", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> HONEY_POT = ITEMS.register("honey_pot", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
 	public static final RegistryObject<Item> STEAK_HONEY = ITEMS.register("steak_honey", () -> new Item(new Item.Properties().group(Main.ICEFEELING)));
+	
+	public static final RegistryObject<Item> SHIT = ITEMS.register("shit", () -> new Item(new Item.Properties().group(Main.ICEFEELING).food(new Food.Builder().hunger(0).saturation(0)
+			.effect( () -> new EffectInstance(Effects.JUMP_BOOST, 200, 0), 1.0F).build())));
+
+	/*------------------------------------------------------ DISC ------------------------------------------------------*/
+
+	
+	public static final RegistryObject<MusicDiscItem> SANS_COEUR = ITEMS.register("sans_coeur", () -> new MusicDiscItem(15, IFModSoundEvents.SANS_COEUR, new Item.Properties().group(Main.ICEFEELING).maxStackSize(1).rarity(ANCIENT)));
+	
+	
+	
 	
 }

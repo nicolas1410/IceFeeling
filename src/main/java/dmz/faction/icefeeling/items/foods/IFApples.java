@@ -11,32 +11,43 @@ import net.minecraft.potion.EffectInstance;
 
 public class IFApples extends Item {
 
-	
-	public IFApples(Properties properties, 		Effect effectIn, int durationIn, int amplifierIn, float probability, 
-												Effect effectIn2, int durationIn2, int amplifierIn2, float probability2, 
-												Effect effectIn3, int durationIn3, int amplifierIn3, float probability3,
-												Effect effectIn4, int durationIn4, int amplifierIn4, float probability4, Rarity rarity) 
-	{
-		
-			super(new Item.Properties().group(Main.ICEFEELING).rarity(rarity)
-					.food(new Food.Builder()
-					.hunger(4)
-					.saturation(1.2F)	
-					.setAlwaysEdible()
-					.effect(() -> new EffectInstance(effectIn, durationIn, amplifierIn), probability)
-					.effect(() -> new EffectInstance(effectIn2, durationIn2, amplifierIn2), probability2)
-					.effect(() -> new EffectInstance(effectIn3, durationIn3, amplifierIn3), probability3)
-					.effect(() -> new EffectInstance(effectIn4, durationIn4, amplifierIn4), probability4).build()));
-				
+	public IFApples(Properties properties, Effect effectIn, int durationIn, int amplifierIn, float probability,
+			Effect effectIn2, int durationIn2, int amplifierIn2, float probability2, Effect effectIn3, int durationIn3,
+			int amplifierIn3, float probability3, Effect effectIn4, int durationIn4, int amplifierIn4,
+			float probability4, Rarity rarity) {
+
+		super(new Item.Properties().group(Main.ICEFEELING).rarity(rarity)
+				.food(new Food.Builder().hunger(4).saturation(1.2F).setAlwaysEdible()
+						.effect(() -> new EffectInstance(effectIn, durationIn, amplifierIn), probability)
+						.effect(() -> new EffectInstance(effectIn2, durationIn2, amplifierIn2), probability2)
+						.effect(() -> new EffectInstance(effectIn3, durationIn3, amplifierIn3), probability3)
+						.effect(() -> new EffectInstance(effectIn4, durationIn4, amplifierIn4), probability4).build()));
+
+	}
+
+	public IFApples(Properties properties, Effect effectIn, int durationIn, int amplifierIn, float probability,
+			Effect effectIn2, int durationIn2, int amplifierIn2, float probability2, Effect effectIn3, int durationIn3,
+			int amplifierIn3, float probability3, Effect effectIn4, int durationIn4, int amplifierIn4, float probability4,
+			Effect effectIn5, int durationIn5, int amplifierIn5, float probability5, Rarity rarity) {
+
+		super(new Item.Properties().group(Main.ICEFEELING).rarity(rarity)
+				.food(new Food.Builder().hunger(4).saturation(1.2F).setAlwaysEdible()
+						.effect(() -> new EffectInstance(effectIn, durationIn, amplifierIn), probability)
+						.effect(() -> new EffectInstance(effectIn2, durationIn2, amplifierIn2), probability2)
+						.effect(() -> new EffectInstance(effectIn3, durationIn3, amplifierIn3), probability3)
+						.effect(() -> new EffectInstance(effectIn4, durationIn4, amplifierIn4), probability4)						
+						.effect(() -> new EffectInstance(effectIn5, durationIn5, amplifierIn5), probability5)
+					.build()));
+
 	}
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
 		if (stack.getItem() == IFItems.OPAL_APPLE.get()) {
-		      return true;
-		   } else {
-			   return false;
-		   }
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

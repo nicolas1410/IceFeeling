@@ -36,7 +36,12 @@ public class IFRecipesProvider extends RecipeProvider{
 	    
 	    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(IFBlocks.MYTHRIL_ORE.get().asItem()), IFItems.MYTHRIL_INGOT.get(), 1F, 200).addCriterion(getName(), hasItem(IFBlocks.MYTHRIL_ORE.get())).build(consumer);
 	    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(IFBlocks.TITANITE_ORE.get().asItem()), IFItems.TITANITE_INGOT.get(), 1F, 200).addCriterion(getName(), hasItem(IFBlocks.TITANITE_ORE.get())).build(consumer);
-	    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(IFItems.OBSIDIAN_FRAGMENT.get().asItem()), IFItems.OBSIDIAN_INGOT.get(), 1F, 160).addCriterion(getName(), hasItem(IFItems.OBSIDIAN_FRAGMENT.get())).build(consumer);
+	    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(IFItems.OBSIDIAN_FRAGMENT.get().asItem()), IFItems.OBSIDIAN_INGOT.get(), 1F, 200).addCriterion(getName(), hasItem(IFItems.OBSIDIAN_FRAGMENT.get())).build(consumer);
+	    
+	    // TODO CHANGE TO OBSIDIAN FURNACE IN THE FUTURE
+	    
+	    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(IFItems.ENDER_DUST.get().asItem()), IFItems.ENDER.get(), 1F, 300).addCriterion(getName(), hasItem(IFItems.ENDER_DUST.get())).build(consumer);
+
 
 	    // APPLES
 	    ShapedRecipeBuilder.shapedRecipe(IFItems.OPAL_APPLE.get()).addCriterion(getName(), hasItem(IFItems.OPAL.get())).patternLine("ooo").patternLine("oxo").patternLine("ooo").key('x', Items.ENCHANTED_GOLDEN_APPLE).key('o', IFItems.OPAL.get()).setGroup("icefeeling").build(consumer);
@@ -134,13 +139,37 @@ public class IFRecipesProvider extends RecipeProvider{
 	    
 	    //MISC
 	    
+	    ShapedRecipeBuilder.shapedRecipe(Items.ENDER_PEARL).addCriterion(getName(), hasItem(IFItems.ENDER.get())).patternLine("xex").patternLine("eee").patternLine("xex").key('e', IFItems.ENDER.get()).key('x', IFItems.XP_FRAGMENT.get()).setGroup("icefeeling").build(consumer);
+	    
+	    ShapedRecipeBuilder.shapedRecipe(IFItems.ENDER_STICK.get()).addCriterion(getName(), hasItem(IFItems.ENDER.get())).patternLine("e").patternLine("e").key('e', IFItems.ENDER.get()).setGroup("icefeeling").build(consumer);
+	    ShapedRecipeBuilder.shapedRecipe(IFItems.IRON_STICK.get()).addCriterion(getName(), hasItem(Items.IRON_INGOT)).patternLine("i").patternLine("i").key('i', Items.IRON_INGOT).setGroup("icefeeling").build(consumer);
+	    ShapedRecipeBuilder.shapedRecipe(IFItems.STEEL_STICK.get()).addCriterion(getName(), hasItem(IFItems.STEEL_INGOT.get())).patternLine("s").patternLine("s").key('e', IFItems.STEEL_INGOT.get()).setGroup("icefeeling").build(consumer);
+
 	    ShapedRecipeBuilder.shapedRecipe(IFItems.ROBUSIUM_PLATE.get()).addCriterion(getName(), hasItem(IFItems.ROBUSIUM.get())).patternLine("rr").patternLine("rr").key('r', IFItems.ROBUSIUM.get()).setGroup("icefeeling").build(consumer);
 	    ShapedRecipeBuilder.shapedRecipe(IFItems.OBSIDIAN_PLATE.get()).addCriterion(getName(), hasItem(IFItems.OBSIDIAN_PLATE.get())).patternLine("oo").patternLine("oo").key('o', IFItems.OBSIDIAN_INGOT.get()).setGroup("icefeeling").build(consumer);
 	    ShapedRecipeBuilder.shapedRecipe(IFItems.OBSIDIAN_FRAGMENT.get(), 2).addCriterion(getName(), hasItem(IFItems.STEEL_HAMMER.get())).patternLine("ho").key('o', Items.OBSIDIAN).key('h', IFItems.STEEL_HAMMER.get()).setGroup("icefeeling").build(consumer);
-	    ShapedRecipeBuilder.shapedRecipe(IFItems.STEEL_HAMMER.get()).addCriterion(getName(), hasItem(IFItems.STEEL_INGOT.get())).patternLine(" nf").patternLine(" sn").patternLine("s  ").key('s', IFItems.IRON_STICK.get()).key('f', IFItems.STEEL_INGOT.get()).key('n', Items.NETHER_BRICK).setGroup("icefeeling").build(consumer);
-	 
+	    ShapedRecipeBuilder.shapedRecipe(IFItems.STEEL_HAMMER.get()).addCriterion(getName(), hasItem(IFItems.STEEL_INGOT.get())).patternLine(" nf").patternLine(" sn").patternLine("s  ").key('s', IFItems.STEEL_STICK.get()).key('f', IFItems.STEEL_INGOT.get()).key('n', Items.NETHER_BRICK).setGroup("icefeeling").build(consumer);
 	    
-
+	    ShapedRecipeBuilder.shapedRecipe(Items.EXPERIENCE_BOTTLE).addCriterion(getName(), hasItem(IFItems.ENCHANTED_BOTTLE.get()))
+	    .patternLine("XBX")
+	    .patternLine("VXV")	
+	    .patternLine("GEG")
+	    .key('B', IFItems.ENCHANTED_BOTTLE.get())
+	    .key('X', IFItems.XP_FRAGMENT.get())
+	    .key('G', Items.GOLD_INGOT)
+	    .key('V', Items.GLASS_BOTTLE)
+	    .key('E', Items.EMERALD)
+	    .setGroup("icefeeling").build(consumer);;
+	    
+	    ShapedRecipeBuilder.shapedRecipe(IFItems.ENCHANTED_BOTTLE.get()).addCriterion(getName(), hasItem(IFItems.ENCHANTED_GEM.get()))
+	    .patternLine("G")
+	    .patternLine("D")
+	    .patternLine("B")
+	    .key('G', IFItems.ENCHANTED_GEM.get())
+	    .key('D', Items.DIAMOND)
+	    .key('B', Items.EXPERIENCE_BOTTLE)
+	    .setGroup("icefeeling").build(consumer);;
+	    
 		
 		} 
 

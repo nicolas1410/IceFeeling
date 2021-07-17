@@ -3,7 +3,6 @@ package dmz.faction.icefeeling.inventory.armorhud;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import dmz.faction.icefeeling.mod.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IngameGui;
@@ -13,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 //@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IFArmorHUD extends IngameGui {
@@ -94,7 +92,7 @@ public class IFArmorHUD extends IngameGui {
 
 					this.itemRenderer.renderItemAndEffectIntoGUI(item, width + this.armorPosX[0][i], height + this.armorPosY[i]);
 					this.fontRenderer.drawStringWithShadow(mat, text, xp, (height + this.armorPosY[i]), 16777215);
-					//blit(mat, width / 2 + this.armorPosX[0][i], height + this.armorPosY[i], 16.0F, 16.0F, 16, 16, 16, 16);
+					blit(mat, width / 2 + this.armorPosX[0][i], height + this.armorPosY[i], 16.0F, 16.0F, 16, 16, 16, 16);
 					
 				}
 

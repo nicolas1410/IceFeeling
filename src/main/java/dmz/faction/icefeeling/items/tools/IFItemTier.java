@@ -18,7 +18,7 @@ public enum IFItemTier implements IItemTier {
 	{
 			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
 	}),
-	OBSIDIAN	(3, 4505, 7.0F, 6, 15, () -> 
+	OBSIDIAN	(3, 4505, 9.0F, 6, 15, () -> 
 	{
 			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
 	}),

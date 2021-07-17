@@ -23,7 +23,7 @@ public class IFItemsModelProvider extends ItemModelProvider
 
 	        builder(itemGenerated, "knocker"); 
   
-	        //builder(itemGenerated, "mushpang_egg");
+	        builder(itemGenerated, "mushpang_egg");
 	        
 	        builder(itemGenerated, "jade");
 	        builder(itemGenerated, "opal");
@@ -37,9 +37,14 @@ public class IFItemsModelProvider extends ItemModelProvider
 	        builder(itemGenerated, "robusium_plate"); 
 	        builder(itemGenerated, "robusium"); 
 	        builder(itemGenerated, "obsidian_fragment");
+	        builder(itemGenerated, "obsidian_plate"); 
 	        builder(itemGenerated, "steel_stick");
 	        builder(itemGenerated, "steel_hammer");
 	        builder(itemGenerated, "steel_ingot");
+	        builder(itemGenerated, "enchanted_bottle");
+	        builder(itemGenerated, "xp_fragment");
+
+
 
 
 	        builder(itemGenerated, "iron_stick"); 
