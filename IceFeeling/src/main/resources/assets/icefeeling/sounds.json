@@ -1,0 +1,11 @@
+{
+	"record.sans_coeur": {
+		"category": "record",
+		"sounds": [
+			{
+				"name": "icefeeling:records/sans_coeur",
+				"stream": true
+			}
+		]
+	}
+}

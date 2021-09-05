@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "icefeeling",
+  "pattern": [
+    "ooo",
+    " x ",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "icefeeling:iron_stick"
+    },
+    "o": {
+      "item": "icefeeling:opal"
+    }
+  },
+  "result": {
+    "item": "icefeeling:opal_pickaxe"
+  }
+}

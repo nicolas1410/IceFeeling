@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "icefeeling:obsidian_fragment"
+  },
+  "result": "icefeeling:obsidian_ingot",
+  "experience": 1.0,
+  "cookingtime": 160
+}

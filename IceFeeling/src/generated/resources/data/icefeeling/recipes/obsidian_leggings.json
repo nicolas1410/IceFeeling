@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "icefeeling",
+  "pattern": [
+    "ooo",
+    "o o",
+    "o o"
+  ],
+  "key": {
+    "o": {
+      "item": "icefeeling:obsidian_plate"
+    }
+  },
+  "result": {
+    "item": "icefeeling:obsidian_leggings"
+  }
+}
