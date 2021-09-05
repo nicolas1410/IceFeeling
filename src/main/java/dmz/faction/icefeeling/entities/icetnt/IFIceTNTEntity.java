@@ -25,31 +25,31 @@ public class IFIceTNTEntity extends Entity {
 
 	IFCustomIceTntExplosion iceTntExplosion;
 
-	private static final DataParameter<Integer> FUSE_CHARGED = EntityDataManager.createKey(IFIceTNTEntity.class,
-			DataSerializers.VARINT);
+	private static final DataParameter<Integer> FUSE_ICE_TNT = EntityDataManager.defineId(IFIceTNTEntity.class,
+			DataSerializers.INT);
 
-	private int fuse_charged = 40;
+	private int fuse_ice = 40;
 	LivingEntity tntPlacedBy;
 
 	public IFIceTNTEntity(EntityType<? extends IFIceTNTEntity> iceTntEntity, World worldIn) {
 		super(iceTntEntity, worldIn);
-		this.preventEntitySpawning = true;
+		this.blocksBuilding = true;
 	}
 
 	public IFIceTNTEntity(World worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
 		this(IFEntityRegister.ICE_TNT_ENTITY.get(), worldIn);
-		this.setPosition(x, y, z);
-		double d0 = worldIn.rand.nextDouble() * (double) ((float) Math.PI * 2F);
-		this.setMotion(-Math.sin(d0) * 0.02D, (double) 0.2F, -Math.cos(d0) * 0.02D);
-		this.setFuse(fuse_charged);
-		this.prevPosX = x;
-		this.prevPosY = y;
-		this.prevPosZ = z;
+		this.setPos(x, y, z);
+		double d0 = worldIn.random.nextDouble() * (double) ((float) Math.PI * 2F);
+		this.setDeltaMovement(-Math.sin(d0) * 0.02D, (double) 0.2F, -Math.cos(d0) * 0.02D);
+		this.setFuse(fuse_ice);
+		this.xo = x;
+		this.yo = y;
+		this.zo = z;
 		this.tntPlacedBy = igniter;
 	}
 
 	protected void registerData() {
-		this.dataManager.register(FUSE_CHARGED, 10);
+		this.entityData.define(FUSE_ICE_TNT, 10);
 	}
 
 	protected boolean canTriggerWalking() {
@@ -61,26 +61,26 @@ public class IFIceTNTEntity extends Entity {
 	}
 
 	public void tick() {
-		if (!this.hasNoGravity()) {
-			this.setMotion(this.getMotion().add(0.0D, -0.04D, 0.0D));
+		if (!this.isNoGravity()) {
+			this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
 		}
 
-		this.move(MoverType.SELF, this.getMotion());
-		this.setMotion(this.getMotion().scale(0.98D));
+		this.move(MoverType.SELF, this.getDeltaMovement());
+		this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
 		if (this.onGround) {
-			this.setMotion(this.getMotion().mul(0.7D, -0.5D, 0.7D));
+			this.setDeltaMovement(this.getDeltaMovement().multiply(0.7D, -0.5D, 0.7D));
 		}
 
-		--this.fuse_charged;
-		if (this.fuse_charged <= 0) {
+		--this.fuse_ice;
+		if (this.fuse_ice <= 0) {
 			this.remove();
-			if (!this.world.isRemote) {
+			if (!this.level.isClientSide) {
 				this.explode();
 			}
 		} else {
-			this.func_233566_aG_();
-			if (this.world.isRemote) {
-				this.world.addParticle(ParticleTypes.SMOKE, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D,
+			this.updateInWaterStateAndDoFluidPushing();
+			if (this.level.isClientSide) {
+				this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.5D, this.getZ(), 0.0D,
 						0.0D, 0.0D);
 			}
 		}
@@ -104,13 +104,13 @@ public class IFIceTNTEntity extends Entity {
 			@Nullable ExplosionContext context, double x, double y, double z, float size, boolean causesFire,
 			Explosion.Mode mode) {
 
-		IFCustomIceTntExplosion iceTntExplosion = new IFCustomIceTntExplosion(world, exploder, damageSource, context, x,
+		IFCustomIceTntExplosion iceTntExplosion = new IFCustomIceTntExplosion(level, exploder, damageSource, context, x,
 				y, z, size, causesFire, mode);
-		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, iceTntExplosion))
+		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(level, iceTntExplosion))
 			return iceTntExplosion;
 
-		iceTntExplosion.doExplosionA();
-		iceTntExplosion.doExplosionB(true);
+		iceTntExplosion.explode();
+		iceTntExplosion.finalizeExplosion(true);
 		return iceTntExplosion;
 
 	}
@@ -118,7 +118,7 @@ public class IFIceTNTEntity extends Entity {
 	protected void explode() {
 		float explosionPower = 2.0F;
 
-		iceTntExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), explosionPower,
+		iceTntExplosion(this, this.getX(), this.getY(0.0625D), this.getZ(), explosionPower,
 				Explosion.Mode.DESTROY);
 
 	}
@@ -131,7 +131,7 @@ public class IFIceTNTEntity extends Entity {
 	 * (abstract) Protected helper method to read subclass entity data from NBT.
 	 */
 	protected void readAdditional(CompoundNBT compound) {
-		this.setFuse(compound.getShort("Charged Fuse"));
+		this.setFuse(compound.getShort("Ice TNT Fuse"));
 	}
 
 	/**
@@ -147,31 +147,43 @@ public class IFIceTNTEntity extends Entity {
 	}
 
 	public void setFuse(int fuseIn) {
-		this.dataManager.set(FUSE_CHARGED, fuseIn);
-		this.fuse_charged = fuseIn;
+		this.entityData.set(FUSE_ICE_TNT, fuseIn);
+		this.fuse_ice = fuseIn;
 	}
 
 	public void notifyDataManagerChange(DataParameter<?> key) {
-		if (FUSE_CHARGED.equals(key)) {
-			this.fuse_charged = this.getFuseDataManager();
+		if (FUSE_ICE_TNT.equals(key)) {
+			this.fuse_ice = this.getFuseDataManager();
 		}
 
 	}
 
-	/**
-	 * Gets the fuse from the data manager
-	 */
 	public int getFuseDataManager() {
-		return this.dataManager.get(FUSE_CHARGED);
+		return this.entityData.get(FUSE_ICE_TNT);
 	}
-
+	
 	public int getFuse() {
-		return this.fuse_charged;
+		return this.fuse_ice;
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		this.entityData.define(FUSE_ICE_TNT, 40);
+	}
+
+	@Override
+	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+		p_213281_1_.putShort("Fuse", (short) this.getFuse());
+	}
+
+	@Override
+	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+		this.setFuse(p_70037_1_.getShort("Fuse"));
 	}
 
 }

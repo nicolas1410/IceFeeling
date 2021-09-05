@@ -20,7 +20,7 @@ public class IFCommonItemFilterSlot extends Slot {
 	 * as well as furnace fuel.
 	 */
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean mayPlace(ItemStack stack) {
 
 		if (stack.getItem() == Items.COBBLESTONE || stack.getItem() == Items.DIRT || stack.getItem() == Items.SAND || stack.getItem() == Items.GRAVEL) {
 			return true;
@@ -35,22 +35,22 @@ public class IFCommonItemFilterSlot extends Slot {
 	}
 
 	@Override
-	public ItemStack getStack() {
-		return this.inventory.getStackInSlot(this.slotIndex);
+	public ItemStack getItem() {
+		return this.container.getItem(this.slotIndex);
 	}
 
 	@Override
-	public int getSlotStackLimit() {
+	public int getMaxStackSize() {
 		return maxSlotStackLimit;
 	}
 
 	@Override
-	public int getItemStackLimit(ItemStack stack) {
-		return this.getSlotStackLimit();
+	public int getMaxStackSize(ItemStack stack) {
+		return this.getMaxStackSize();
 	}
 
 	@Override
-	public void onSlotChanged() {
-		this.inventory.markDirty();
+	public void setChanged() {
+		this.container.setChanged();
 	}
 }

@@ -56,7 +56,7 @@ public class IFArmorHUD extends IngameGui {
 		super(Minecraft.getInstance());
 		this.minecraft = Minecraft.getInstance();
 		this.itemRenderer = this.minecraft.getItemRenderer();
-		this.fontRenderer = this.minecraft.fontRenderer;
+		this.fontRenderer = this.minecraft.font;
 
 	}
 
@@ -65,18 +65,19 @@ public class IFArmorHUD extends IngameGui {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
 		MatrixStack mat = new MatrixStack();
-		int width = this.mc.getMainWindow().getWidth();
-		int height = this.mc.getMainWindow().getHeight();
+		int width = this.minecraft.getWindow().getWidth();
+		int height = this.minecraft.getWindow().getHeight();
 		RenderArmorStatus(mat, width, height);
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private void RenderArmorStatus(MatrixStack mat, int width, int height) {
 		if (armY <= 90 && Math.abs(armX) <= 90) {
 			int i = 5;
 			RenderSystem.pushMatrix();
 			RenderSystem.translated(0.0D, 0.0D, -255.0D);
-			for (ItemStack item : this.mc.player.getEquipmentAndArmor()) {
+			for (ItemStack item : this.minecraft.player.getArmorSlots()) {
 				if (armType == ArmorType.ARMOR && i > 3) {
 					i--;
 					continue;
@@ -85,19 +86,19 @@ public class IFArmorHUD extends IngameGui {
 				if (Damage >= 0) {
 					String p, text = "";
 					int xp = width / 2 + this.armorPosX[1][i];
-					p = String.valueOf(item.getMaxDamage() - item.getDamage());
+					p = String.valueOf(item.getMaxDamage() - item.getDamageValue());
 					text = getDamageText(p, Damage);
 					xp += 23 - p.length() * 6;
 
-
-					this.itemRenderer.renderItemAndEffectIntoGUI(item, width + this.armorPosX[0][i], height + this.armorPosY[i]);
-					this.fontRenderer.drawStringWithShadow(mat, text, xp, (height + this.armorPosY[i]), 16777215);
+					
+					this.itemRenderer.renderAndDecorateItem(item, width + this.armorPosX[0][i], height + this.armorPosY[i]);
+					this.fontRenderer.drawShadow(mat, text, xp, (height + this.armorPosY[i]), 16777215);
 					blit(mat, width / 2 + this.armorPosX[0][i], height + this.armorPosY[i], 16.0F, 16.0F, 16, 16, 16, 16);
 					
 				}
 
 				if (i == 5) {
-					this.mc.getTextureManager().bindTexture(new ResourceLocation("icefeeling", armorTextures[i]));
+					this.minecraft.getTextureManager().bind(new ResourceLocation("icefeeling", armorTextures[i]));
 
 				}
 				i--;
@@ -140,7 +141,7 @@ public class IFArmorHUD extends IngameGui {
 		int i = 5;
 		int xOffset = right ? -42 : 42;
 		int xOffset2 = right ? 75 : 0;
-		for (ItemStack item : this.mc.player.getEquipmentAndArmor()) {
+		for (ItemStack item : this.minecraft.player.getArmorSlots()) {
 			if (armType == ArmorType.ARMOR && i > 3) {
 				i--;
 				continue;
@@ -149,32 +150,32 @@ public class IFArmorHUD extends IngameGui {
 			if (Damage >= 0) {
 				String p, text = "";
 				int tLength = -17;
-				p = String.valueOf(item.getDamage());
+				p = String.valueOf(item.getDamageValue());
 				text = getDamageText(p, Damage);
 				if (right)
 					tLength = p.length() * 6 + 1;
 	
 				if (i == 5) {
-					this.itemRenderer.renderItemAndEffectIntoGUI(item, xpos + xOffset + xOffset2, ypos);
-					this.fontRenderer.drawStringWithShadow(mat, text, (xpos - tLength + xOffset + xOffset2), (ypos + 4),
+					this.itemRenderer.renderAndDecorateItem(item, xpos + xOffset + xOffset2, ypos);
+					this.fontRenderer.drawShadow(mat, text, (xpos - tLength + xOffset + xOffset2), (ypos + 4),
 							16777215);
 				} else if (i == 4) {
-					this.itemRenderer.renderItemAndEffectIntoGUI(item, xpos + xOffset + xOffset2, ypos + 18);
-					this.fontRenderer.drawStringWithShadow(mat, text, (xpos - tLength + xOffset + xOffset2),
+					this.itemRenderer.renderAndDecorateItem(item, xpos + xOffset + xOffset2, ypos + 18);
+					this.fontRenderer.drawShadow(mat, text, (xpos - tLength + xOffset + xOffset2),
 							(ypos + 18 + 4), 16777215);
 				} else {
-					this.itemRenderer.renderItemAndEffectIntoGUI(item, xpos + xOffset2, ypos + i * 18);
-					this.fontRenderer.drawStringWithShadow(mat, text, (xpos - tLength + xOffset2), (ypos + i * 18 + 4),
+					this.itemRenderer.renderAndDecorateItem(item, xpos + xOffset2, ypos + i * 18);
+					this.fontRenderer.drawShadow(mat, text, (xpos - tLength + xOffset2), (ypos + i * 18 + 4),
 							16777215);
 				}
 			} else if (i == 5) {
-				this.mc.getTextureManager().bindTexture(new ResourceLocation("icefeeling", armorTextures[i]));
+				this.minecraft.getTextureManager().bind(new ResourceLocation("icefeeling", armorTextures[i]));
 				blit(mat, xpos + xOffset + xOffset2, ypos, 16.0F, 16.0F, 16, 16, 16, 16);
 			} else if (i == 4) {
-				this.mc.getTextureManager().bindTexture(new ResourceLocation(armorTextures[i]));
+				this.minecraft.getTextureManager().bind(new ResourceLocation(armorTextures[i]));
 				blit(mat, xpos + xOffset + xOffset2, ypos + 18, 16.0F, 16.0F, 16, 16, 16, 16);
 			} else {
-				this.mc.getTextureManager().bindTexture(new ResourceLocation(armorTextures[i]));
+				this.minecraft.getTextureManager().bind(new ResourceLocation(armorTextures[i]));
 				blit(mat, xpos + xOffset2, ypos + i * 18, 16.0F, 16.0F, 16, 16, 16, 16);
 			}
 			i--;

@@ -2,7 +2,6 @@ package dmz.faction.icefeeling.inventory.singleitem;
 
 import java.util.stream.IntStream;
 
-import dmz.faction.icefeeling.inventory.abstracts.IFCommonItemFilterTileBase;
 import dmz.faction.icefeeling.inventory.singleitem.abstracts.IFSingleItemChestTileBase;
 import dmz.faction.icefeeling.mod.Main;
 import dmz.faction.icefeeling.mod.registry.IFTileRegistry;
@@ -27,7 +26,7 @@ public class IFSingleItemChestTile extends IFSingleItemChestTileBase {
 
 	@Override
 	public Container IcreateMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new IFSingleItemChestContainer(id, playerInventory, pos, world, playerEntity);
+		return new IFSingleItemChestContainer(id, playerInventory, pos, level, playerEntity);
 	}
 
 	

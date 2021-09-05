@@ -22,7 +22,7 @@ public class IFHammer extends Item {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean isFoil(ItemStack stack) {
 		if (stack.getItem() == IFItems.ENCHANTED_BOTTLE.get()) {
 			return true;
 		} else {
@@ -35,14 +35,14 @@ public class IFHammer extends Item {
 	public ItemStack getContainerItem(@Nonnull ItemStack stack) {
 		Random rand = new Random();
 		ItemStack container = stack.copy();
-		if (container.attemptDamageItem(1, rand, null))
+		if (container.hurt(1, rand, null))
 			return ItemStack.EMPTY;
 		else
 			return container;
 	}
 
 	@Override
-	public boolean hasContainerItem() {
+	public boolean isComplex() {
 		return true;
 	}
 
@@ -53,8 +53,8 @@ public class IFHammer extends Item {
 	}
 
 	@Override
-	public boolean isDamageable() {
-		return true;
+	public boolean canBeDepleted() {
+		return this.isDamageable(this.getDefaultInstance());
 	}
 
 }

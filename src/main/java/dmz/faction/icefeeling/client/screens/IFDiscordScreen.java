@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class IFDiscordScreen extends WithNarratorSettingsScreen {
-   private static final AbstractOption[] OPTIONS = new AbstractOption[]{AbstractOption.NARRATOR, AbstractOption.SHOW_SUBTITLES, AbstractOption.ACCESSIBILITY_TEXT_BACKGROUND_OPACITY, AbstractOption.ACCESSIBILITY_TEXT_BACKGROUND, AbstractOption.CHAT_OPACITY, AbstractOption.LINE_SPACING, AbstractOption.DELAY_INSTANT, AbstractOption.AUTO_JUMP, AbstractOption.SNEAK, AbstractOption.SPRINT, AbstractOption.SCREEN_EFFECT_SCALE_SLIDER, AbstractOption.FOV_EFFECT_SCALE_SLIDER};
+	   private static final AbstractOption[] OPTIONS = new AbstractOption[]{AbstractOption.NARRATOR, AbstractOption.SHOW_SUBTITLES, AbstractOption.TEXT_BACKGROUND_OPACITY, AbstractOption.TEXT_BACKGROUND, AbstractOption.CHAT_OPACITY, AbstractOption.CHAT_LINE_SPACING, AbstractOption.CHAT_DELAY, AbstractOption.AUTO_JUMP, AbstractOption.TOGGLE_CROUCH, AbstractOption.TOGGLE_SPRINT, AbstractOption.SCREEN_EFFECTS_SCALE, AbstractOption.FOV_EFFECTS_SCALE};
 
    public IFDiscordScreen(Screen parentScreen, GameSettings settings) {
       super(parentScreen, settings, new TranslationTextComponent("options.accessibility.title"), OPTIONS);
@@ -22,16 +22,16 @@ public class IFDiscordScreen extends WithNarratorSettingsScreen {
 
    protected void func_244718_c() {
       this.addButton(new Button(this.width / 2 - 155, this.height - 27, 150, 20, new TranslationTextComponent("options.accessibility.link"), (p_244738_1_) -> {
-         this.minecraft.displayGuiScreen(new ConfirmOpenLinkScreen((p_244739_1_) -> {
+         this.minecraft.setScreen(new ConfirmOpenLinkScreen((p_244739_1_) -> {
             if (p_244739_1_) {
-               Util.getOSType().openURI("https://facebook.com");
+               Util.getPlatform().openUri("https://facebook.com");
             }
 
-            this.minecraft.displayGuiScreen(this);
+            this.minecraft.setScreen(this);
          }, "https://facebook.com", true));
       }));
       this.addButton(new Button(this.width / 2 + 5, this.height - 27, 150, 20, DialogTexts.GUI_DONE, (p_244737_1_) -> {
-         this.minecraft.displayGuiScreen(this.parentScreen);
+         this.minecraft.setScreen(this.lastScreen);
       }));
    }
 }

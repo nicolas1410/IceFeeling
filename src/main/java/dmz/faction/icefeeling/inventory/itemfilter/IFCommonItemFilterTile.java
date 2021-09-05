@@ -6,6 +6,7 @@ import dmz.faction.icefeeling.mod.registry.IFTileRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
 public class IFCommonItemFilterTile extends IFCommonItemFilterTileBase {
@@ -23,7 +24,7 @@ public class IFCommonItemFilterTile extends IFCommonItemFilterTileBase {
 
 	@Override
 	public Container IcreateMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new IFCommonItemFilterContainer(id, playerInventory, pos, world, playerEntity);
+		return new IFCommonItemFilterContainer(id, playerInventory, pos, level, playerEntity);
 	}
 
 	
@@ -35,6 +36,36 @@ public class IFCommonItemFilterTile extends IFCommonItemFilterTileBase {
 	@Override
 	public int[] getSlotsForFace(Direction side) {
 		return SLOT;
+	}
+
+	@Override
+	public ItemStack getItem(int p_70301_1_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ItemStack removeItem(int p_70298_1_, int p_70298_2_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ItemStack removeItemNoUpdate(int p_70304_1_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setItem(int p_70299_1_, ItemStack p_70299_2_) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearContent() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

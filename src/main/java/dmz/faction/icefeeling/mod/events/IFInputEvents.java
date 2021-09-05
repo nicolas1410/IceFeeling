@@ -17,7 +17,7 @@ public class IFInputEvents {
 	@SubscribeEvent
 	public static void onKeyPress(InputEvent.KeyInputEvent event) {
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.world == null)
+		if (mc.level == null)
 			return;
 		onInput(mc, event.getKey(), event.getAction());
 	}
@@ -25,15 +25,16 @@ public class IFInputEvents {
 	@SubscribeEvent
 	public static void onMouseClick(InputEvent.MouseInputEvent event) {
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.world == null)
+		if (mc.level == null)
 			return;
 	}
 
 	private static void onInput(Minecraft mc, int key, int action) {
-		if (mc.currentScreen == null && IFKeybindsInit.WhatEver.isPressed()) {
-		PlayerEntity player = mc.getInstance().player;
+		if (mc.getWindow() == null && IFKeybindsInit.WhatEver.consumeClick()) {
+		@SuppressWarnings("resource")
+		PlayerEntity player = Minecraft.getInstance().player;
 		
-			player.addItemStackToInventory(IFItems.FIRE_OPAL.get().getDefaultInstance());
+			player.addItem(IFItems.FIRE_OPAL.get().getDefaultInstance());
 			
 		}
 	}

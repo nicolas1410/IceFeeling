@@ -1,7 +1,6 @@
 package dmz.faction.icefeeling.mod.events;
 
 import dmz.faction.icefeeling.items.IFItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.monster.SilverfishEntity;
@@ -77,8 +76,8 @@ public class IFEnchantedFragmentDrops {
 
 	private static boolean drops(ItemStack stack, LivingDropsEvent event) {
 		
-		return event.getDrops().add(new ItemEntity(event.getEntity().world, event.getEntity().getPosX(),
-				event.getEntity().getPosY(), event.getEntity().getPosZ(), stack));
+		return event.getDrops().add(new ItemEntity(event.getEntity().level, event.getEntity().getX(),
+				event.getEntity().getY(), event.getEntity().getZ(), stack));
 	}
 	
 }

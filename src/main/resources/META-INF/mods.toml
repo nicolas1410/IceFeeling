@@ -1,7 +1,7 @@
 
 modLoader="javafml"
 
-loaderVersion="[35,)"
+loaderVersion="[36,)"
 
 license="All rights reserved"
 
@@ -21,13 +21,13 @@ Halloweed mod for IceFeeling Faction PVP Server
 [[dependencies.icefeeling]]
 modId="forge"
 mandatory=true
-versionRange="[35,)"
+versionRange="[36,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.icefeeling]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.16.4]"
+versionRange="[1.16.5, 1.17]"
 ordering="NONE"
 side="BOTH"

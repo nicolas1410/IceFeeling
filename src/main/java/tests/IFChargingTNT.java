@@ -24,18 +24,18 @@ public class IFChargingTNT {
 		{
 			Entity entity = event.getEntity();
 			World world = event.getWorld();
-			if (!world.isRemote) 
+			if (!world.isClientSide) 
 			{
 
-					BlockPos blockpos = entity.getPosition().down();
+					BlockPos blockpos = entity.blockPosition().below();
 					Block tnt = Blocks.TNT;
 	
-					if (world.getBlockState(blockpos) == tnt.getDefaultState()) 
+					if (world.getBlockState(blockpos) == tnt.defaultBlockState()) 
 					{
 	
 						System.out.println("onTntCharged");
 	
-						world.setBlockState(blockpos, IFBlocks.CHARGED_TNT.get().getDefaultState(), 3);
+						world.setBlock(blockpos, IFBlocks.CHARGED_TNT.get().defaultBlockState(), 3);
 	
 					}
 

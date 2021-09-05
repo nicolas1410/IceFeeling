@@ -25,7 +25,7 @@ public class IFMeteorHeadRenderer extends MobRenderer<IFMeteorHeadEntity, IFMete
     * Returns the location of an entity's texture.
     */
    @Override
-   public ResourceLocation getEntityTexture(IFMeteorHeadEntity entity) {
+   public ResourceLocation getTextureLocation(IFMeteorHeadEntity entity) {
       return TEXTURE;
    }
 

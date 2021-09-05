@@ -12,6 +12,7 @@ import dmz.faction.icefeeling.items.IFItems;
 import dmz.faction.icefeeling.mod.events.IFAttackIndicator;
 import dmz.faction.icefeeling.mod.events.IFCooldownSwingRemove;
 import dmz.faction.icefeeling.mod.events.IFEnchantedFragmentDrops;
+import dmz.faction.icefeeling.mod.events.IFEntityJoinWorldEvent;
 import dmz.faction.icefeeling.mod.events.IFFovModifierEvent;
 import dmz.faction.icefeeling.mod.events.IFGuiOpenEvent;
 import dmz.faction.icefeeling.mod.events.IFLoggedInEvent;
@@ -31,18 +32,18 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(Main.MOD_ID)
+@Mod(Main.MOD_ID)	
+@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Bus.MOD)
 public class Main {
 
 	public static final String MOD_ID = "icefeeling";
@@ -55,12 +56,12 @@ public class Main {
 		bus.addListener(this::setup);
 
 		MinecraftForge.EVENT_BUS.register(this);
-
+		
 		IFModSoundEvents.SOUND_EVENTS.register(bus);
 		IFItems.ITEMS.register(bus);
+		IFTileRegistry.TILES.register(bus);
 		IFBlocks.BLOCKS.register(bus);
 		IFEntityRegister.ENTITIES.register(bus);
-		IFTileRegistry.TILES.register(bus);
 		IFTileRegistry.CONTAINERS.register(bus);
 
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, IFOreGeneration::generateOres);
@@ -70,8 +71,8 @@ public class Main {
 	}
 
 	public static final ItemGroup ICEFEELING = new ItemGroup(12, "icefeeling") {
-		@OnlyIn(Dist.CLIENT)
-		public ItemStack createIcon() {
+		@Override
+		public ItemStack makeIcon() {
 			return new ItemStack(IFItems.JADE.get());
 		}
 	};
@@ -80,7 +81,7 @@ public class Main {
 
 		event.enqueueWork(() -> {
 
-			RenderTypeLookup.setRenderLayer(IFBlocks.ROBUSIUM_GLASS.get(), RenderType.getTranslucent());
+			RenderTypeLookup.setRenderLayer(IFBlocks.ROBUSIUM_GLASS.get(), RenderType.translucent());
 
 			IFEntityRegister.registerGlobalEntityAttributes();
 
@@ -90,22 +91,27 @@ public class Main {
 			MinecraftForge.EVENT_BUS.addListener(IFAttackIndicator::onLivingHurt);
 			MinecraftForge.EVENT_BUS.addListener(IFCooldownSwingRemove::onAttackEntity);
 			MinecraftForge.EVENT_BUS.addListener(IFFovModifierEvent::Zoom);
+			MinecraftForge.EVENT_BUS.addListener(IFEntityJoinWorldEvent::onEntityJoinWorld);
+
 
 			try {
 				Field saturation = ObfuscationReflectionHelper.findField(Food.class, "field_221471_b");
 				Field effect = ObfuscationReflectionHelper.findField(Food.class, "field_221475_f");
 				Field tnt_resistance = ObfuscationReflectionHelper.findField(AbstractBlock.class, "field_235689_au_");// blastResistance
-
+				
 				List<Pair<Supplier<EffectInstance>, Float>> effects = Lists.newArrayList();
 				saturation.setAccessible(true);
 				effect.setAccessible(true);
 				tnt_resistance.setAccessible(true);
 
+
 				saturation.setFloat(Foods.BREAD, 1.0F);
 				tnt_resistance.setFloat(Blocks.OBSIDIAN, 49.0F);
 
+
+
 				effects.add(Pair.of(() -> new EffectInstance(Effects.REGENERATION, 400, 1), 1.0F));
-				effects.add(Pair.of(() -> new EffectInstance(Effects.RESISTANCE, 6000, 0), 1.0F));
+				effects.add(Pair.of(() -> new EffectInstance(Effects.DAMAGE_RESISTANCE, 6000, 0), 1.0F));
 				effects.add(Pair.of(() -> new EffectInstance(Effects.FIRE_RESISTANCE, 6000, 0), 1.0F));
 				effects.add(Pair.of(() -> new EffectInstance(Effects.ABSORPTION, 2400, 0), 2.0F));
 				effect.set(Foods.ENCHANTED_GOLDEN_APPLE, effects);

@@ -2,12 +2,8 @@ package dmz.faction.icefeeling.inventory.singleitem.abstracts;
 
 import javax.annotation.Nullable;
 
-import dmz.faction.icefeeling.blocks.blockgui.abstracts.IFCommonItemFilterBlock;
 import dmz.faction.icefeeling.inventory.IFITileInventory;
-import dmz.faction.icefeeling.inventory.slot.IFCommonItemFilterSlot;
-import dmz.faction.icefeeling.inventory.slot.IFSlotSingleItemChest;
 import dmz.faction.icefeeling.mod.Main;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,16 +18,14 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.INameable;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 
 public abstract class IFSingleItemChestTileBase extends TileEntity
 		implements IInventory, IFITileInventory, INamedContainerProvider, INameable, ISidedInventory {
@@ -44,22 +38,24 @@ public abstract class IFSingleItemChestTileBase extends TileEntity
 	protected float prevLidAngle;
 	/** The number of players currently using this chest */
 	protected int numPlayersUsing;
+	
+	protected BlockPos pos = this.worldPosition;
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT nbtTag = new CompoundNBT();
-		this.write(nbtTag);
-		this.markDirty();
-		return new SUpdateTileEntityPacket(getPos(), -1, nbtTag);
+		this.save(nbtTag);
+		this.setChanged();
+		return new SUpdateTileEntityPacket(pos, -1, nbtTag);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		CompoundNBT tag = pkt.getNbtCompound();
-		this.read(world.getBlockState(pos), tag);
-		this.markDirty();
-		world.notifyBlockUpdate(pos, world.getBlockState(pos).getBlock().getDefaultState(), world.getBlockState(pos),
-				2);
+		CompoundNBT tag = pkt.getTag();
+		this.load(level.getBlockState(pos), tag);
+		this.setChanged();
+		level.markAndNotifyBlock(pos, null, level.getBlockState(pos).getBlock().defaultBlockState(), level.getBlockState(pos),
+				2, 2);
 	}
 
 	public IFSingleItemChestTileBase(TileEntityType<?> tileEntityTypeIn) {
@@ -84,12 +80,12 @@ public abstract class IFSingleItemChestTileBase extends TileEntity
 	 */
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		this.chestContents.set(index, stack);
-		this.getInventoryStackLimit();
-		this.markDirty();
+		this.getMaxStackSize();
+		this.setChanged();
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 217;
 	}
 
@@ -104,29 +100,30 @@ public abstract class IFSingleItemChestTileBase extends TileEntity
 	 * Removes up to a specified number of items from an inventory slot and returns
 	 * them in a new stack. In this case, split the stack in 2.
 	 */
-	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.chestContents, index, count);
+	@Override
+	public ItemStack removeItem(int index, int count) {
+		return ItemStackHelper.removeItem(this.chestContents, index, count);
 	}
 
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.chestContents, index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return ItemStackHelper.takeItem(this.chestContents, index);
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		super.read(state, compound);
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
 
-		this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+		this.chestContents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(compound, this.chestContents);
 
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		ItemStackHelper.saveAllItems(compound, this.chestContents);
 		return compound;
 	}
@@ -179,12 +176,12 @@ public abstract class IFSingleItemChestTileBase extends TileEntity
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return IcanExtractItem(index, stack, direction);
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
 		return this.IisItemValidForSlot(index, itemStackIn);
 	}
 
@@ -194,7 +191,7 @@ public abstract class IFSingleItemChestTileBase extends TileEntity
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.chestContents.clear();
 	}
 
@@ -230,12 +227,22 @@ public abstract class IFSingleItemChestTileBase extends TileEntity
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.world.getTileEntity(this.pos) != this) {
+	public boolean stillValid(PlayerEntity player) {
+		if (this.level.getBlockEntity(this.pos) != this) {
 			return false;
 		} else {
-			return !(player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
+			return !(player.distanceToSqr((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
 					(double) this.pos.getZ() + 0.5D) > 64.0D);
 		}
+	}
+	
+	@Override
+	public ItemStack getItem(int index) {
+		return this.chestContents.get(index);
+	}
+
+	@Override
+	public void setItem(int index, ItemStack stack) {
+		this.setItem(index, stack);
 	}
 }

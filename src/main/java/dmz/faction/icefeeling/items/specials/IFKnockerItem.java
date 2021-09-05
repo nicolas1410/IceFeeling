@@ -33,16 +33,16 @@ public class IFKnockerItem extends Item {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(new StringTextComponent("Press LSHIFT for infos").mergeStyle(TextFormatting.DARK_GRAY));
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		tooltip.add(new StringTextComponent("Press LSHIFT for infos").withStyle(TextFormatting.DARK_GRAY));
 		
-		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) 
+		if(InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) 
 		{
-			tooltip.add(new StringTextComponent("Right Click To Get Haste 3").mergeStyle(TextFormatting.ITALIC).mergeStyle(TextFormatting.GRAY));
-			tooltip.add(new StringTextComponent("6 minutes of cooldown").mergeStyle(TextFormatting.ITALIC).mergeStyle(TextFormatting.AQUA));
+			tooltip.add(new StringTextComponent("Right Click To Get Haste 3").withStyle(TextFormatting.ITALIC).withStyle(TextFormatting.GRAY));
+			tooltip.add(new StringTextComponent("6 minutes of cooldown").withStyle(TextFormatting.ITALIC).withStyle(TextFormatting.AQUA));
 
 		}
 	
@@ -51,20 +51,20 @@ public class IFKnockerItem extends Item {
 	
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) 
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity player, Hand handIn) 
 	{
 		
-			if(!player.getCooldownTracker().hasCooldown(this)) 
+			if(!player.getCooldowns().isOnCooldown(this)) 
 			{
-				player.addPotionEffect(new EffectInstance(Effects.HASTE, 2400, 2));
-				player.getCooldownTracker().setCooldown(this, 9600);
+				player.addEffect(new EffectInstance(Effects.DIG_SPEED, 2400, 2));
+				player.getCooldowns().addCooldown(this, 9600);
 				
-				player.world.playSound(player, player.getPosition(), SoundEvents.ENTITY_BLAZE_AMBIENT, SoundCategory.NEUTRAL, 1.0F, 0.5F);
-				player.world.playSound(player, player.getPosition(), SoundEvents.ENTITY_BLAZE_HURT, SoundCategory.NEUTRAL, 1.0F, 0.5F);
-					return ActionResult.resultSuccess(player.getHeldItem(handIn));			
+				player.level.playSound(player, player.blockPosition(), SoundEvents.BLAZE_AMBIENT, SoundCategory.NEUTRAL, 1.0F, 0.5F);
+				player.level.playSound(player, player.blockPosition(), SoundEvents.BLAZE_HURT, SoundCategory.NEUTRAL, 1.0F, 0.5F);
+					return ActionResult.success(player.getItemInHand(handIn));			
 			}
 			
-		return ActionResult.resultFail(player.getHeldItem(handIn));
+		return ActionResult.fail(player.getItemInHand(handIn));
 	
 	}
 	

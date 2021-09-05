@@ -2,6 +2,8 @@ package dmz.faction.icefeeling.mod.registry;
 
 import dmz.faction.icefeeling.entities.chargedtnt.IFChargedTNTEntity;
 import dmz.faction.icefeeling.entities.chargedtnt.IFChargedTNTRenderer;
+import dmz.faction.icefeeling.entities.chunktnt.IFChunkTNTEntity;
+import dmz.faction.icefeeling.entities.chunktnt.IFChunkTNTRenderer;
 import dmz.faction.icefeeling.entities.icetnt.IFIceTNTEntity;
 import dmz.faction.icefeeling.entities.icetnt.IFIceTNTRenderer;
 import dmz.faction.icefeeling.entities.invasion.zombies.ChargedZombie;
@@ -33,20 +35,19 @@ public class IFEntityRegister {
 	/*------------------------------------------------------ CHARGED TNT ------------------------------------------------------*/
     
 	public static final RegistryObject<EntityType<IFChargedTNTEntity>> CHARGED_TNT_ENTITY = ENTITIES.register("charged_tnt_entity", 
- 			() -> EntityType.Builder.<IFChargedTNTEntity>create(IFChargedTNTEntity::new, EntityClassification.MISC)
- 			.size(0.5F, 0.5F)
+ 			() -> EntityType.Builder.<IFChargedTNTEntity>of(IFChargedTNTEntity::new, EntityClassification.MISC)
+ 			.sized(0.5F, 0.5F)
             .setTrackingRange(4)
             .setUpdateInterval(20)
             .setShouldReceiveVelocityUpdates(true)
             .build("charged_tnt_entity"));
 	
 	
-	
 	/*------------------------------------------------------ ICE TNT ------------------------------------------------------*/
 	
 	public static final RegistryObject<EntityType<IFIceTNTEntity>> ICE_TNT_ENTITY = ENTITIES.register("ice_tnt_entity", 
- 			() -> EntityType.Builder.<IFIceTNTEntity>create(IFIceTNTEntity::new, EntityClassification.MISC)
- 			.size(0.5F, 0.5F)
+ 			() -> EntityType.Builder.<IFIceTNTEntity>of(IFIceTNTEntity::new, EntityClassification.MISC)
+ 			.sized(0.5F, 0.5F)
             .setTrackingRange(4)
             .setUpdateInterval(20)
             .setShouldReceiveVelocityUpdates(true)
@@ -54,15 +55,27 @@ public class IFEntityRegister {
 	
 	
 	
-	/*------------------------------------------------------ ICE TNT ------------------------------------------------------*/
+	/*------------------------------------------------------ LAVA TNT ------------------------------------------------------*/
 	
 	public static final RegistryObject<EntityType<IFLavaTNTEntity>> LAVA_TNT_ENTITY = ENTITIES.register("lava_tnt_entity", 
- 			() -> EntityType.Builder.<IFLavaTNTEntity>create(IFLavaTNTEntity::new, EntityClassification.MISC)
- 			.size(0.5F, 0.5F)
+ 			() -> EntityType.Builder.<IFLavaTNTEntity>of(IFLavaTNTEntity::new, EntityClassification.MISC)
+ 			.sized(0.5F, 0.5F)
             .setTrackingRange(4)
             .setUpdateInterval(20)
             .setShouldReceiveVelocityUpdates(true)
             .build("lava_tnt_entity"));
+	
+	
+/*------------------------------------------------------ ICE TNT ------------------------------------------------------*/
+	
+	public static final RegistryObject<EntityType<IFChunkTNTEntity>> CHUNK_TNT_ENTITY = ENTITIES.register("chunk_tnt_entity", 
+ 			() -> EntityType.Builder.<IFChunkTNTEntity>of(IFChunkTNTEntity::new, EntityClassification.MISC)
+ 			.sized(0.5F, 0.5F)
+            .setTrackingRange(4)
+            .setUpdateInterval(20)
+            .setShouldReceiveVelocityUpdates(true)
+            .build("chunk_tnt_entity"));
+	
 	
 	
 	/*------------------------------------------------------ *************** ------------------------------------------------------*/
@@ -76,8 +89,8 @@ public class IFEntityRegister {
 	/*------------------------------------------------------ MUSHPANG ------------------------------------------------------*/
 	
 	public static final RegistryObject<EntityType<IFMushpangEntity>> MUSHPANG = ENTITIES.register("mushpang_entity", 
- 			() -> EntityType.Builder.<IFMushpangEntity>create(IFMushpangEntity::new, EntityClassification.CREATURE)
- 			.size(1.5F, 1.5F)
+ 			() -> EntityType.Builder.<IFMushpangEntity>of(IFMushpangEntity::new, EntityClassification.CREATURE)
+ 			.sized(1.5F, 1.5F)
  			.build("mushpang_entity"));
 	
 	
@@ -85,9 +98,9 @@ public class IFEntityRegister {
 	/*------------------------------------------------------ CHARGED_ZOMBIE ------------------------------------------------------*/
 	
 	public static final RegistryObject<EntityType<ChargedZombie>> CHARGED_ZOMBIE = ENTITIES.register("charged_zombie_entity", 
- 			() -> EntityType.Builder.<ChargedZombie>create(ChargedZombie::new, EntityClassification.MONSTER)
- 			.size(0.6F, 1.95F)
- 			.trackingRange(16)
+ 			() -> EntityType.Builder.<ChargedZombie>of(ChargedZombie::new, EntityClassification.MONSTER)
+ 			.sized(0.6F, 1.95F)
+ 			.setTrackingRange(16)
  			.build("charged_zombie_entity"));
 	
 	
@@ -95,10 +108,10 @@ public class IFEntityRegister {
 	/*------------------------------------------------------ CHARGED_ZOMBIE ------------------------------------------------------*/
 	
 	public static final RegistryObject<EntityType<IFMeteorHeadEntity>> METEOR_HEAD = ENTITIES.register("meteor_head_entity", 
- 			() -> EntityType.Builder.<IFMeteorHeadEntity>create(IFMeteorHeadEntity::new, EntityClassification.MONSTER)
- 			.size(0.65F, 0.65F)
- 			.trackingRange(16)
- 			.immuneToFire()
+ 			() -> EntityType.Builder.<IFMeteorHeadEntity>of(IFMeteorHeadEntity::new, EntityClassification.MONSTER)
+ 			.sized(0.65F, 0.65F)
+ 			.setTrackingRange(16)
+ 			.fireImmune()
  			.build("meteor_head_entity"));
 	
 	
@@ -117,12 +130,13 @@ public class IFEntityRegister {
 	/*------------------------------------------------------ *************** ------------------------------------------------------*/
 
 
+	@SuppressWarnings("deprecation")
 	public static void registerGlobalEntityAttributes()
 	{
 		
-		GlobalEntityTypeAttributes.put(IFEntityRegister.MUSHPANG.get(), IFMushpangEntity.registerAttributes().create());
-		GlobalEntityTypeAttributes.put(IFEntityRegister.CHARGED_ZOMBIE.get(), ChargedZombie.registerAttributes().create());
-		GlobalEntityTypeAttributes.put(IFEntityRegister.METEOR_HEAD.get(), IFMeteorHeadEntity.registerAttributes().create());
+		GlobalEntityTypeAttributes.put(IFEntityRegister.MUSHPANG.get(), IFMushpangEntity.registerAttributes().build());
+		GlobalEntityTypeAttributes.put(IFEntityRegister.CHARGED_ZOMBIE.get(), ChargedZombie.registerAttributes().build());
+		GlobalEntityTypeAttributes.put(IFEntityRegister.METEOR_HEAD.get(), IFMeteorHeadEntity.registerAttributes().build());
 
 	}
 
@@ -131,6 +145,7 @@ public class IFEntityRegister {
 	{
     	
 		// Entity renderers
+		RenderingRegistry.registerEntityRenderingHandler(CHUNK_TNT_ENTITY.get(), IFChunkTNTRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(LAVA_TNT_ENTITY.get(), IFLavaTNTRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(CHARGED_TNT_ENTITY.get(), IFChargedTNTRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ICE_TNT_ENTITY.get(), IFIceTNTRenderer::new);

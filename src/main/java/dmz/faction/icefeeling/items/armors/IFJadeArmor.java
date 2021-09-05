@@ -31,19 +31,19 @@ public class IFJadeArmor extends ArmorItem {
     {
 		if(hasFullSet(stack, slot, player)) 
 		{
-			player.addPotionEffect(new EffectInstance(Effects.HASTE, 0, 1)); // HASTE 2
-			player.addPotionEffect(new EffectInstance(Effects.SPEED, 0, 2)); // SPEED 3
-			player.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 0, 0));
+			player.addEffect(new EffectInstance(Effects.DIG_SPEED, 0, 1)); // HASTE 2
+			player.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 0, 2)); // SPEED 3
+			player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 0, 0));
 		}				
 
     }
 	
 	private boolean hasFullSet(ItemStack stack, EquipmentSlotType slot, PlayerEntity player) 
 	{
-		return 	   player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IFItems.JADE_HELMET.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == IFItems.JADE_CHESTPLATE.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == IFItems.JADE_LEGGINGS.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == IFItems.JADE_BOOTS.get();
+		return 	   player.getItemBySlot(EquipmentSlotType.HEAD).getItem() == IFItems.JADE_HELMET.get()
+				&& player.getItemBySlot(EquipmentSlotType.CHEST).getItem() == IFItems.JADE_CHESTPLATE.get()
+				&& player.getItemBySlot(EquipmentSlotType.LEGS).getItem() == IFItems.JADE_LEGGINGS.get()
+				&& player.getItemBySlot(EquipmentSlotType.FEET).getItem() == IFItems.JADE_BOOTS.get();
 	}
 		
 	@Override

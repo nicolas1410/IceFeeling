@@ -14,14 +14,14 @@ public class IFAttackIndicator {
     	
         Entity entityAttacked = e.getEntityLiving();               
         if (entityAttacked != null) {
-            if (!entityAttacked.getEntityWorld().isRemote()) {
-                if (e.getSource().getTrueSource() instanceof PlayerEntity) {
+            if (!entityAttacked.level.isClientSide) {
+                if (e.getSource().getDirectEntity() instanceof PlayerEntity) {
                 	
-                	LivingEntity trueSource = (LivingEntity) e.getSource().getTrueSource().getEntity();
-                	String name = e.getSource().getTrueSource().getScoreboardName();
-                	String itemHeldName = trueSource.getHeldItemMainhand().getItem().getName().getString();
+                	LivingEntity trueSource = (LivingEntity) e.getSource().getDirectEntity();
+                	String name = e.getSource().getDirectEntity().getScoreboardName();
+                	String itemHeldName = trueSource.getMainHandItem().getItem().getRegistryName().getNamespace();
                 	               
-                	System.out.println(Main.SERVER_NAME_END_SPACE + name + " a fait " + e.getAmount() + " dégâts" + " avec " + itemHeldName + " à " + entityAttacked.getName().getString() + " avec ses effets: " + trueSource.getActivePotionEffects());
+                	System.out.println(Main.SERVER_NAME_END_SPACE + name + " a fait " + e.getAmount() + " dégâts" + " avec " + itemHeldName + " à " + entityAttacked.getName().getString() + " avec ses effets: " + trueSource.getActiveEffects());
                 
                 	}
             }

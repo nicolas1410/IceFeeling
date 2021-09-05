@@ -4,12 +4,12 @@ import dmz.faction.icefeeling.inventory.singleitem.IFSingleItemChestTile;
 import dmz.faction.icefeeling.inventory.singleitem.abstracts.IFSingleItemChestTileBase;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -31,17 +31,17 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class IFSingleItemChestBlock extends Block {
 	
-	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+	public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
 	public IFSingleItemChestBlock(AbstractBlock.Properties builder) {
 		super(builder);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 
@@ -50,9 +50,9 @@ public class IFSingleItemChestBlock extends Block {
 	 * logic
 	 */
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		if (stack.hasDisplayName()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (stack.hasCustomHoverName()) {
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
 			if (tileentity instanceof IFSingleItemChestTileBase) {
 				((IFSingleItemChestTileBase) tileentity).setCustomName(stack.getDisplayName());
 			}
@@ -62,33 +62,33 @@ public class IFSingleItemChestBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (!state.isIn(newState.getBlock())) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (!state.is(newState.getBlock())) {
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
 			if (tileentity instanceof IFSingleItemChestTileBase) {
-				InventoryHelper.dropInventoryItems(worldIn, pos, (IFSingleItemChestTileBase) tileentity);
-				worldIn.updateComparatorOutputLevel(pos, this);
+				InventoryHelper.dropContents(worldIn, pos, (IFSingleItemChestTileBase) tileentity);
+				worldIn.updateNeighbourForOutputSignal(pos, this);
 			}
 
-			super.onReplaced(state, worldIn, pos, newState, isMoving);
+			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if (worldIn.isRemote) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		if (worldIn.isClientSide) {
 			return ActionResultType.SUCCESS;
 		} else {
-			this.interactWith(worldIn, pos, player);
+			this.openContainer(worldIn, pos, player);
 			return ActionResultType.CONSUME;
 		}
 	}
 
-	private void interactWith(World world, BlockPos pos, PlayerEntity player) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+	private void openContainer(World world, BlockPos pos, PlayerEntity player) {
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof INamedContainerProvider) {
 			NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity,
-					tileEntity.getPos());
+					tileEntity.getBlockPos());
 		}
 	}
 	
@@ -102,44 +102,27 @@ public class IFSingleItemChestBlock extends Block {
 		return true;
 	}
 
-	/**
-	 * @deprecated call via {@link IBlockState#hasComparatorInputOverride()}
-	 *             whenever possible. Implementing/overriding is fine.
-	 */
-	public boolean hasComparatorInputOverride(BlockState state) {
+	public boolean hasAnalogOutputSignal(BlockState p_149740_1_) {
 		return true;
 	}
 
-	/**
-	 * @deprecated call via
-	 *             {@link IBlockState#getComparatorInputOverride(World,BlockPos)}
-	 *             whenever possible. Implementing/overriding is fine.
-	 */
-	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
-		return Container.calcRedstoneFromInventory((IInventory) worldIn.getTileEntity(pos));
+	public int getAnalogOutputSignal(BlockState p_180641_1_, World p_180641_2_, BlockPos p_180641_3_) {
+		return Container.getRedstoneSignalFromBlockEntity(p_180641_2_.getBlockEntity(p_180641_3_));
 	}
 
-	/**
-	 * Returns the blockstate with the given rotation from the passed blockstate. If
-	 * inapplicable, returns the passed blockstate.
-	 * 
-	 * @deprecated call via {@link IBlockState#withRotation(Rotation)} whenever
-	 *             possible. Implementing/overriding is fine.
-	 */
-	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+	public BlockRenderType getRenderShape(BlockState p_149645_1_) {
+		return BlockRenderType.MODEL;
 	}
 
-	/**
-	 * Returns the blockstate with the given mirror of the passed blockstate. If
-	 * inapplicable, returns the passed blockstate.
-	 * 
-	 * @deprecated call via {@link IBlockState#withMirror(Mirror)} whenever
-	 *             possible. Implementing/overriding is fine.
-	 */
-	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+	public BlockState rotate(BlockState p_185499_1_, Rotation p_185499_2_) {
+		return p_185499_1_.setValue(FACING, p_185499_2_.rotate(p_185499_1_.getValue(FACING)));
 	}
+
+	@SuppressWarnings("deprecation")
+	public BlockState mirror(BlockState p_185471_1_, Mirror p_185471_2_) {
+		return p_185471_1_.rotate(p_185471_2_.getRotation(p_185471_1_.getValue(FACING)));
+	}
+
 
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING);

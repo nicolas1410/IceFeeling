@@ -13,8 +13,8 @@ public class IFBlocksTagProvider extends BlockTagsProvider {
 	}
 
 	@Override
-	protected void registerTags() {
-       getOrCreateBuilder(IFTags.ICEFEELING_ORES)
+	protected void addTags() {
+       this.tag(IFTags.ICEFEELING_ORES)
        .add(IFBlocks.JADE_ORE.get()).add(IFBlocks.MYTHRIL_ORE.get())
        .add(IFBlocks.TITANITE_ORE.get()).add(IFBlocks.OPAL_ORE.get())
        .add(IFBlocks.ROBUSIUM_ORE.get()).add(IFBlocks.SOLARIUM_ORE.get());

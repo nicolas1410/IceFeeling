@@ -16,8 +16,8 @@ public class IFApples extends Item {
 			int amplifierIn3, float probability3, Effect effectIn4, int durationIn4, int amplifierIn4,
 			float probability4, Rarity rarity) {
 
-		super(new Item.Properties().group(Main.ICEFEELING).rarity(rarity)
-				.food(new Food.Builder().hunger(4).saturation(1.2F).setAlwaysEdible()
+		super(new Item.Properties().tab(Main.ICEFEELING).rarity(rarity)
+				.food(new Food.Builder().nutrition(4).saturationMod(1.2F).alwaysEat()
 						.effect(() -> new EffectInstance(effectIn, durationIn, amplifierIn), probability)
 						.effect(() -> new EffectInstance(effectIn2, durationIn2, amplifierIn2), probability2)
 						.effect(() -> new EffectInstance(effectIn3, durationIn3, amplifierIn3), probability3)
@@ -30,8 +30,8 @@ public class IFApples extends Item {
 			int amplifierIn3, float probability3, Effect effectIn4, int durationIn4, int amplifierIn4, float probability4,
 			Effect effectIn5, int durationIn5, int amplifierIn5, float probability5, Rarity rarity) {
 
-		super(new Item.Properties().group(Main.ICEFEELING).rarity(rarity)
-				.food(new Food.Builder().hunger(4).saturation(1.2F).setAlwaysEdible()
+		super(new Item.Properties().tab(Main.ICEFEELING).rarity(rarity)
+				.food(new Food.Builder().nutrition(4).saturationMod(1.2F).alwaysEat()
 						.effect(() -> new EffectInstance(effectIn, durationIn, amplifierIn), probability)
 						.effect(() -> new EffectInstance(effectIn2, durationIn2, amplifierIn2), probability2)
 						.effect(() -> new EffectInstance(effectIn3, durationIn3, amplifierIn3), probability3)
@@ -42,7 +42,7 @@ public class IFApples extends Item {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean isFoil(ItemStack stack) {
 		if (stack.getItem() == IFItems.OPAL_APPLE.get()) {
 			return true;
 		} else {

@@ -23,8 +23,8 @@ public class IFBiomeChanges {
 					ConfiguredFeature<?, ?> feature = supplier.get();
 
 					// original feature
-					while (feature.getFeature() instanceof DecoratedFeature) {
-						feature = ((DecoratedFeatureConfig) feature.getConfig()).feature.get();
+					while (feature.getFeatures() instanceof DecoratedFeature) {
+						feature = ((DecoratedFeatureConfig) feature.config()).feature.get();
 					}
 
 					if (feature.feature instanceof ChorusPlantFeature) {

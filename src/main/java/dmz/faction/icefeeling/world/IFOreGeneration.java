@@ -25,24 +25,24 @@ public class IFOreGeneration {
 		if (!(event.getCategory().equals(Biome.Category.NETHER) || event.getCategory().equals(Biome.Category.THEEND))) {
 			
 			//Generate from Y = 90 / VeinSize of 3 max // RARE
-			generateOreTopSolid(event.getGeneration(), OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-					IFBlocks.OPAL_ORE.get().getDefaultState(), 3, 90, 0, 256, 40);
+			generateOreTopSolid(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+					IFBlocks.OPAL_ORE.get().defaultBlockState(), 3, 90, 0, 256, 40);
 			
 			// VeinSize of 7 max / Gen max 24 Y
-			generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-					IFBlocks.JADE_ORE.get().getDefaultState(), 7, 24, 8);
+			generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+					IFBlocks.JADE_ORE.get().defaultBlockState(), 7, 24, 8);
 			
 			// VeinSize of 4 max / Gen max 16 Y
-			generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-					IFBlocks.TITANITE_ORE.get().getDefaultState(), 4, 16, 10);
+			generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+					IFBlocks.TITANITE_ORE.get().defaultBlockState(), 4, 16, 10);
 			
 			// VeinSize of 8 max / Gen max 5 Y
-			generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-					IFBlocks.ROBUSIUM_ORE.get().getDefaultState(), 8, 5, 10)
+			generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+					IFBlocks.ROBUSIUM_ORE.get().defaultBlockState(), 8, 5, 10)
 			;
 			// Generate like Lapis Lazuli, but 5 of veinSize instead of 7
-			generateOreDepthAverage(event.getGeneration(), OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-					IFBlocks.MYTHRIL_ORE.get().getDefaultState(), 6, 16, 10);
+			generateOreDepthAverage(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+					IFBlocks.MYTHRIL_ORE.get().defaultBlockState(), 6, 16, 10);
 			
 	
 			
@@ -58,10 +58,10 @@ public class IFOreGeneration {
 		if (event.getCategory().equals(Biome.Category.THEEND)) {
 			
 			generateOre(event.getGeneration(), END_STONE,
-					IFBlocks.XP_ORE.get().getDefaultState(), 7, 128, 8);
+					IFBlocks.XP_ORE.get().defaultBlockState(), 7, 128, 8);
 			
 			generateOreTopSolid(event.getGeneration(), END_STONE,
-					IFBlocks.ENDER_ORE.get().getDefaultState(), 8, 5, 0, 30, 40);
+					IFBlocks.ENDER_ORE.get().defaultBlockState(), 8, 5, 0, 30, 40);
 			
 		}
 		
@@ -69,17 +69,17 @@ public class IFOreGeneration {
 		if (event.getCategory().equals(Biome.Category.NETHER)) {
 			
 			generateOre(event.getGeneration(), LAVA,
-					IFBlocks.SOLARIUM_ORE.get().getDefaultState(), 6, 32, 6);			
+					IFBlocks.SOLARIUM_ORE.get().defaultBlockState(), 6, 32, 6);			
 		}
 
 	}
 
 	
 	private static void generateOreTopSolid(BiomeGenerationSettingsBuilder settings, RuleTest fillerType, BlockState state, int veinSize, int bottomOffset, int topOffset, int maximum, int amount) {
-		settings.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-				Feature.ORE.withConfiguration(new OreFeatureConfig(fillerType, state, veinSize))
-						.withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(bottomOffset, topOffset, maximum)))
-						.square().func_242731_b(amount));
+		settings.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+				Feature.ORE.configured(new OreFeatureConfig(fillerType, state, veinSize))
+						.decorated(Placement.RANGE.configured(new TopSolidRangeConfig(bottomOffset, topOffset, maximum)))
+						.squared().count(amount));
 		 /*	 
 	     * 	Calculation of the RangePlacement
 	     *	int k = random.nextInt(config.maximum - config.topOffset) + config.bottomOffset;
@@ -87,9 +87,9 @@ public class IFOreGeneration {
 	}
 
 	private static void generateOre(BiomeGenerationSettingsBuilder settings, RuleTest fillerType, BlockState state, int veinSize, int range, int amount) {
-		settings.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-				Feature.ORE.withConfiguration(new OreFeatureConfig(fillerType, state, veinSize))
-						.square().range(range).func_242731_b(amount));
+		settings.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+				Feature.ORE.configured(new OreFeatureConfig(fillerType, state, veinSize))
+						.squared().range(range).count(amount));
 		
 
 	    /*	 
@@ -104,10 +104,10 @@ public class IFOreGeneration {
 	}  
 
 	private static void generateOreDepthAverage(BiomeGenerationSettingsBuilder settings, RuleTest fillerType, BlockState state, int veinSize, int baseline, int spread) {
-		settings.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-				Feature.ORE.withConfiguration(new OreFeatureConfig(fillerType, state, veinSize))
-						.withPlacement(Placement.DEPTH_AVERAGE.configure(new DepthAverageConfig(baseline, spread))
-						.square()));
+		settings.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+				Feature.ORE.configured(new OreFeatureConfig(fillerType, state, veinSize))
+						.decorated(Placement.DEPTH_AVERAGE.configured(new DepthAverageConfig(baseline, spread))
+						.squared()));
 		
 	}
 }

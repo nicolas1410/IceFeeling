@@ -16,22 +16,21 @@ public class IFItemsTagProvider extends ItemTagsProvider {
 	}
 	
 	@Override
-	protected void registerTags() {
+	protected void addTags() {
 
-		
-      getOrCreateBuilder(Tags.Items.GEMS).add(IFItems.JADE.get());
-      getOrCreateBuilder(Tags.Items.GEMS).add(IFItems.OPAL.get());
-      getOrCreateBuilder(Tags.Items.GEMS).add(IFItems.ENCHANTED_GEM.get());
-      getOrCreateBuilder(Tags.Items.GEMS).add(IFItems.ENCHANTED_FRAGMENT.get());
-      getOrCreateBuilder(Tags.Items.INGOTS).add(IFItems.MYTHRIL_INGOT.get());
-      getOrCreateBuilder(Tags.Items.INGOTS).add(IFItems.OBSIDIAN_INGOT.get());
-      getOrCreateBuilder(Tags.Items.INGOTS).add(IFItems.TITANITE_INGOT.get());
+      this.tag(Tags.Items.GEMS).add(IFItems.JADE.get());
+      this.tag(Tags.Items.GEMS).add(IFItems.OPAL.get());
+      this.tag(Tags.Items.GEMS).add(IFItems.ENCHANTED_GEM.get());
+      this.tag(Tags.Items.GEMS).add(IFItems.ENCHANTED_FRAGMENT.get());
+      this.tag(Tags.Items.INGOTS).add(IFItems.MYTHRIL_INGOT.get());
+      this.tag(Tags.Items.INGOTS).add(IFItems.OBSIDIAN_INGOT.get());
+      this.tag(Tags.Items.INGOTS).add(IFItems.TITANITE_INGOT.get());
 
-      getOrCreateBuilder(IFTags.ENCHANTED_DAGGER).add(IFItems.ENCHANTED_DAGGER.get());
+      this.tag(IFTags.ENCHANTED_DAGGER).add(IFItems.ENCHANTED_DAGGER.get());
       
-      getOrCreateBuilder(Tags.Items.RODS).add(IFItems.IRON_STICK.get()).add(IFItems.OBSIDIAN_STICK.get());
+      this.tag(Tags.Items.RODS).add(IFItems.IRON_STICK.get()).add(IFItems.OBSIDIAN_STICK.get());
       
-      getOrCreateBuilder(IFTags.ICEFEELING_APPLES).add(IFItems.OPAL_APPLE.get()).add(IFItems.OBSIDIAN_APPLE.get());
+      this.tag(IFTags.ICEFEELING_APPLES).add(IFItems.OPAL_APPLE.get()).add(IFItems.OBSIDIAN_APPLE.get());
 
 
 

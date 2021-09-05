@@ -37,28 +37,28 @@ public class IFIceTNTBlock extends Block implements IForgeBlock {
 	public IFIceTNTBlock(AbstractBlock.Properties properties) 
 	{
 		super(properties);
-	    this.setDefaultState(this.getDefaultState().with(UNSTABLE, Boolean.valueOf(false)));
+		this.registerDefaultState(this.defaultBlockState().setValue(UNSTABLE, Boolean.valueOf(false)));
 
 	}
 	
 	@Override
 	public void catchFire(BlockState state, World world, BlockPos pos, @Nullable Direction face, @Nullable LivingEntity igniter)
 	{
-		if (!world.isRemote) 
+		if (!world.isClientSide) 
 		{
 			IFIceTNTEntity iceTntEntity = new IFIceTNTEntity(world, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, igniter);
-			world.addEntity(iceTntEntity);
-			world.playSound((PlayerEntity)null, iceTntEntity.getPosX(), iceTntEntity.getPosY(), iceTntEntity.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.addFreshEntity(iceTntEntity);
+			world.playSound((PlayerEntity)null, iceTntEntity.getX(), iceTntEntity.getY(), iceTntEntity.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 	}
     
-	
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) 
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) 
 	{
 		      
-		if (!oldState.isIn(state.getBlock())) 
+		if (!oldState.is(state.getBlock())) 
 		{
-		         if (worldIn.isBlockPowered(pos)) 
+		         if (worldIn.hasNeighborSignal(pos)) 
 		         {
 		            catchFire(state, worldIn, pos, null, null);
 		            worldIn.removeBlock(pos, false);
@@ -71,7 +71,7 @@ public class IFIceTNTBlock extends Block implements IForgeBlock {
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) 
 	{
-		if (worldIn.isBlockPowered(pos)) 
+		if (worldIn.hasNeighborSignal(pos)) 
 		{
 			catchFire(state, worldIn, pos, null, null);
 		    worldIn.removeBlock(pos, false);
@@ -83,70 +83,70 @@ public class IFIceTNTBlock extends Block implements IForgeBlock {
 	* this block
 	 */
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) 
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) 
 	{
-		if (!worldIn.isRemote() && !player.isCreative() && state.get(UNSTABLE)) 
+		if (!worldIn.isClientSide() && !player.isCreative() && state.getValue(UNSTABLE)) 
 		{
 		         catchFire(state, worldIn, pos, null, null);
 		}
 
-		      super.onBlockHarvested(worldIn, pos, state, player);
+		      super.playerWillDestroy(worldIn, pos, state, player);
 	}
 
 	/**
 	* Called when this Block is destroyed by an Explosion
 	*/
 	@Override
-	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn)
+	public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn)
 	{
 		
-		if (!worldIn.isRemote) 
+		if (!worldIn.isClientSide) 
 		{
-			IFIceTNTEntity iceTntEntity = new IFIceTNTEntity(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, explosionIn.getExplosivePlacedBy());
-			iceTntEntity.setFuse((short)(worldIn.rand.nextInt(iceTntEntity.getFuse() / 4) + iceTntEntity.getFuse() / 8));
-		     worldIn.addEntity(iceTntEntity);
+			IFIceTNTEntity iceTntEntity = new IFIceTNTEntity(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, explosionIn.getSourceMob());
+			iceTntEntity.setFuse((short)(worldIn.random.nextInt(iceTntEntity.getFuse() / 4) + iceTntEntity.getFuse() / 8));
+		     worldIn.addFreshEntity(iceTntEntity);
 		     
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) 
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) 
 	{
-		ItemStack itemstack = player.getHeldItem(handIn);
+		ItemStack itemstack = player.getItemInHand(handIn);
 		Item item = itemstack.getItem();
 		if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE) 
 		{
-		    return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+		    return super.use(state, worldIn, pos, player, handIn, hit);
 		    
 		} else {
-			catchFire(state, worldIn, pos, hit.getFace(), player);
-		    worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
+			catchFire(state, worldIn, pos, hit.getDirection(), player);
+		    worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
 		    if (!player.isCreative()) 
 		    {
 		    	if (item == Items.FLINT_AND_STEEL) 
 		    	{
-		    		itemstack.damageItem(1, player, (player1) -> 
+		    		itemstack.hurtAndBreak(1, player, (player1) -> 
 		    		{
-		    			player1.sendBreakAnimation(handIn);
+		    			player1.broadcastBreakEvent(handIn);
 		    		});
 		    	} else {
 		    		itemstack.shrink(1);
 		    	}
 		    }
-		    return ActionResultType.func_233537_a_(worldIn.isRemote);
+		    return ActionResultType.sidedSuccess(worldIn.isClientSide);
 			}
 	}
 	
 	@Override
-	public void onProjectileCollision(World worldIn, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile) 
+	public void onProjectileHit(World worldIn, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile) 
 	{
-		if (!worldIn.isRemote)
+		if (!worldIn.isClientSide)
 		{
-			Entity entity = projectile.func_234616_v_();
-			if (projectile.isBurning()) 
+			Entity entity = projectile.getEntity();
+			if (projectile.isOnFire()) 
 			{
-				BlockPos blockpos = hit.getPos();
+				BlockPos blockpos = hit.getBlockPos();
 				catchFire(state, worldIn, blockpos, null, entity instanceof LivingEntity ? (LivingEntity)entity : null);
 				worldIn.removeBlock(blockpos, false);
 			}
@@ -159,13 +159,13 @@ public class IFIceTNTBlock extends Block implements IForgeBlock {
 	*/
 	
 	@Override
-	public boolean canDropFromExplosion(Explosion explosionIn) 
+	public boolean dropFromExplosion(Explosion explosionIn) 
 	{
 		return false;
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) 
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) 
 	{
 		builder.add(UNSTABLE);
 	}

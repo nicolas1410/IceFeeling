@@ -5,6 +5,8 @@ import net.minecraft.block.FlowerBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
@@ -17,12 +19,12 @@ public class IFMagicFlower extends FlowerBlock {
 	}
 
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		if (!worldIn.isRemote && worldIn.getDifficulty() != Difficulty.PEACEFUL) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+		if (!worldIn.isClientSide && worldIn.getDifficulty() != Difficulty.PEACEFUL) {
 			if (entityIn instanceof LivingEntity) {
 				LivingEntity livingentity = (LivingEntity) entityIn;
-				// livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1));
-				entityIn.attackEntityFrom(DamageSource.MAGIC, 0.5F);
+				livingentity.addEffect(new EffectInstance(Effects.HARM, 1));
+				entityIn.hurt(DamageSource.MAGIC, 0.5F);
 			}
 		}
 

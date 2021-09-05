@@ -25,11 +25,11 @@ public class IFTags {
 	
         public static ITag.INamedTag<Block> makeBlockTag(final String name) 
         {
-		return BlockTags.makeWrapperTag(new ResourceLocation(Main.MOD_ID, name).toString());
+		return BlockTags.bind(new ResourceLocation(Main.MOD_ID, name).toString());
         }
         public static ITag.INamedTag<Item> makeItemTag(final String name) 
     	{
-    		return ItemTags.makeWrapperTag(new ResourceLocation(Main.MOD_ID, name).toString());
+    		return ItemTags.bind(new ResourceLocation(Main.MOD_ID, name).toString());
     	}
 
 }

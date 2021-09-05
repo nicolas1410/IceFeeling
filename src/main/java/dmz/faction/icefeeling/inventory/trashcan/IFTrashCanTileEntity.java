@@ -44,7 +44,6 @@ public class IFTrashCanTileEntity extends IFTileEntityInventory implements IInve
 	 * Sets the given item stack to the specified slot in the inventory (can be
 	 * crafting or armor sections).
 	 */
-	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		this.items.set(index, stack);
 		if (stack.getCount() > this.getInventoryStackLimit()) {
@@ -57,10 +56,10 @@ public class IFTrashCanTileEntity extends IFTileEntityInventory implements IInve
 	 * Don't rename this method to canInteractWith due to conflicts with Container
 	 */
 	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.world.getTileEntity(this.pos) != this) {
+		if (this.level.getBlockEntity(this.pos) != this) {
 			return false;
 		} else {
-			return player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
+			return player.distanceToSqr((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
 					(double) this.pos.getZ() + 0.5D) <= 64.0D;
 		}
 	}
@@ -94,7 +93,7 @@ public class IFTrashCanTileEntity extends IFTileEntityInventory implements IInve
 
 	@Override
 	public Container IcreateMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new IFTrashCanContainer(id, playerInventory, pos, world, playerEntity);
+		return new IFTrashCanContainer(id, playerInventory, pos, level, playerEntity);
 	}
 
 	@Override
@@ -103,7 +102,7 @@ public class IFTrashCanTileEntity extends IFTileEntityInventory implements IInve
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
 		return true;
 	}
 }

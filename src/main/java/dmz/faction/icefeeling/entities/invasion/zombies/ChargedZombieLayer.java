@@ -10,21 +10,25 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ChargedZombieLayer extends EnergyLayer<ChargedZombie, ChargedZombieModel<ChargedZombie>> {
    private static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
-   private final EntityModel<ChargedZombie> creeperModel = new ChargedZombieModel<>(2.0F, false);
+   private final EntityModel<ChargedZombie> zombieModel = new ChargedZombieModel<>(2.0F, false);
 
    public ChargedZombieLayer(IEntityRenderer<ChargedZombie, ChargedZombieModel<ChargedZombie>> model) {
       super(model);
    }
 
-   protected float func_225634_a_(float f) {
+   @Override
+   protected float xOffset(float f) {
       return f * 0.01F;
    }
 
-   protected ResourceLocation func_225633_a_() {
+   @Override
+   protected ResourceLocation getTextureLocation() {
       return LIGHTNING_TEXTURE;
    }
 
-   protected EntityModel<ChargedZombie> func_225635_b_() {
-      return this.creeperModel;
+   @Override
+   protected EntityModel<ChargedZombie> model() {
+      return this.zombieModel;
    }
+
 }

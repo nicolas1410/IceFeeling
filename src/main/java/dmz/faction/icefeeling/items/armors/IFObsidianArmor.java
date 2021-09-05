@@ -23,18 +23,21 @@ public class IFObsidianArmor extends ArmorItem {
     {
 		if(hasFullSet(stack, slot, player)) 
 		{
-			
-			player.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 0, 0));
+			if(player.getActiveEffects() != Effects.FIRE_RESISTANCE) 
+			{
+				player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 0, 0));
+				System.out.println("FIRE_RESISTANCE ADDED");
+			}
 		}	
     }
 	
 	private boolean hasFullSet(ItemStack stack, EquipmentSlotType slot, PlayerEntity player) 
 	{
 		
-		return 	   player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IFItems.OBSIDIAN_HELMET.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == IFItems.OBSIDIAN_CHESTPLATE.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == IFItems.OBSIDIAN_LEGGINGS.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == IFItems.OBSIDIAN_BOOTS.get();
+		return 	   player.getItemBySlot(EquipmentSlotType.HEAD).getItem() == IFItems.OBSIDIAN_HELMET.get()
+				&& player.getItemBySlot(EquipmentSlotType.CHEST).getItem() == IFItems.OBSIDIAN_CHESTPLATE.get()
+				&& player.getItemBySlot(EquipmentSlotType.LEGS).getItem() == IFItems.OBSIDIAN_LEGGINGS.get()
+				&& player.getItemBySlot(EquipmentSlotType.FEET).getItem() == IFItems.OBSIDIAN_BOOTS.get();
 		
 	}
 		

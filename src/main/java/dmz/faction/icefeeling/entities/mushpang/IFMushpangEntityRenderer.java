@@ -18,7 +18,7 @@ public class IFMushpangEntityRenderer extends MobRenderer<IFMushpangEntity, IFMu
 	}
 	
 	@Override
-	public ResourceLocation getEntityTexture(IFMushpangEntity entity) 
+	public ResourceLocation getTextureLocation(IFMushpangEntity entity) 
 	{
 		return TEXTURE;
 	}

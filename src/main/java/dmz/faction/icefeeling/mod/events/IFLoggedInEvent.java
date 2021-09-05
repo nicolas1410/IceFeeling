@@ -15,9 +15,9 @@ public class IFLoggedInEvent {
 	@SubscribeEvent
 	public static void onLoggedInEvent(final PlayerLoggedInEvent e) {
 		PlayerEntity player = e.getPlayer();
-		UUID uuid = player.getUniqueID();
+		UUID uuid = player.getUUID();
 		String playerName = player.getScoreboardName();
-		boolean firstTimeJoining = player.getDataManager().isEmpty();
+		boolean firstTimeJoining = player.getEntityData().isEmpty();
 		
 		//Joined For The First Time
 		if (firstTimeJoining) { player.sendMessage(new StringTextComponent(TextFormatting.GOLD + Main.SERVER_NAME_END_SPACE + "Bienvenue à " + playerName + " !"), uuid); 
@@ -30,13 +30,13 @@ public class IFLoggedInEvent {
 	
 	private static void giveItemsOnFirstJoin(PlayerEntity player) {
 		
-		player.addItemStackToInventory(Items.LEATHER_HELMET.getDefaultInstance());
-		player.addItemStackToInventory(Items.LEATHER_CHESTPLATE.getDefaultInstance());
-		player.addItemStackToInventory(Items.LEATHER_LEGGINGS.getDefaultInstance());
-		player.addItemStackToInventory(Items.LEATHER_BOOTS.getDefaultInstance());
+		player.addItem(Items.LEATHER_HELMET.getDefaultInstance());
+		player.addItem(Items.LEATHER_CHESTPLATE.getDefaultInstance());
+		player.addItem(Items.LEATHER_LEGGINGS.getDefaultInstance());
+		player.addItem(Items.LEATHER_BOOTS.getDefaultInstance());
 		for(int i = 0; i < 32; i++) 
 		{
-			player.addItemStackToInventory(Items.COOKED_BEEF.getDefaultInstance());
+			player.addItem(Items.COOKED_BEEF.getDefaultInstance());
 		}
 	}
 }

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dmz.faction.icefeeling.mod.Main;
-import dmz.faction.icefeeling.mod.registry.IFTileRegistry;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,8 +24,8 @@ public class IFTrashCanScreen extends ContainerScreen<IFTrashCanContainer> imple
 		this.passEvents = false;
 		// int i = 222;
 		// int j = 114;
-		this.ySize = 114 + 6 * 18;
-		this.playerInventoryTitleY = this.ySize - 94;
+		this.imageHeight = 114 + 6 * 18;
+		this.inventoryLabelY = this.imageHeight - 94;
 	}
 	
 
@@ -35,24 +34,26 @@ public class IFTrashCanScreen extends ContainerScreen<IFTrashCanContainer> imple
 		this.passEvents = false;
 		// int i = 222;
 		// int j = 114;
-		this.ySize = 114 + 6 * 18;
-		this.playerInventoryTitleY = this.ySize - 94;
+		this.imageHeight = 114 + 6 * 18;
+		this.inventoryLabelY = this.imageHeight - 94;
 	}
 
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(TRASH_CAN_TEXTURE);
-		int i = (this.width - this.xSize) / 2;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, 6 * 18 + 17);
-		this.blit(matrixStack, i, j + 6 * 18 + 17, 0, 126, this.xSize, 96);
+		this.minecraft.getTextureManager().bind(TRASH_CAN_TEXTURE);
+		int i = (this.width - this.imageWidth) / 2;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, 6 * 18 + 17);
+		this.blit(matrixStack, i, j + 6 * 18 + 17, 0, 126, this.imageWidth, 96);
 	}
 
 }

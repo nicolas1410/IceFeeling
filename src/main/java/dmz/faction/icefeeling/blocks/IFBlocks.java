@@ -13,6 +13,7 @@ import dmz.faction.icefeeling.blocks.flowers.IFSlownessFlower;
 import dmz.faction.icefeeling.blocks.robusium.IFRobusiumBlock;
 import dmz.faction.icefeeling.blocks.robusium.IFRobusiumGlassBlock;
 import dmz.faction.icefeeling.blocks.tnts.IFChargedTNTBock;
+import dmz.faction.icefeeling.blocks.tnts.IFChunkTNTBlock;
 import dmz.faction.icefeeling.blocks.tnts.IFIceTNTBlock;
 import dmz.faction.icefeeling.blocks.tnts.IFLavaTNTBlock;
 import dmz.faction.icefeeling.items.IFItems;
@@ -29,7 +30,6 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import tests.multiblocks.IFBlockMulti;
 
 public class IFBlocks {
 
@@ -40,133 +40,129 @@ public class IFBlocks {
 	
 	/**/
 	public static final RegistryObject<Block> JADE_ORE = registerBlockWithDefaultItem("jade_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(3, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).strength(3, 9)));
 	
 	/*BEST ARMURE*/
 	public static final RegistryObject<Block> OPAL_ORE = registerBlockWithDefaultItem("opal_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(2, 9)));
+			-> new Block(Block.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(2, 9)));
 	
 	public static final RegistryObject<Block> OPAL_ORE_NETHER = registerBlockWithDefaultItem("opal_ore_nether", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(2, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(2, 9)));
 	
 	/*BEST EPEES*/
 	public static final RegistryObject<Block> FIRE_OPAL_ORE = registerBlockWithDefaultItem("fire_opal_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(1, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(1, 9)));
 	
 	/*ARMURE AVEC*/
 	public static final RegistryObject<Block> MYTHRIL_ORE = registerBlockWithDefaultItem("mythril_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(3, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(3, 9)));
 	
 	/*ARMURE LA PLUS DURABLE*/
 	public static final RegistryObject<Block> TITANITE_ORE = registerBlockWithDefaultItem("titanite_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(15, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(15, 9)));
 	
 	/*FUEL POUR FURNACE EN TITANITE*/
 	public static final RegistryObject<Block> SOLARIUM_ORE = registerBlockWithDefaultItem("solarium_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(30, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(30, 9)));
 	
 	/*OBSI++*/
 	public static final RegistryObject<Block> ROBUSIUM_ORE = registerBlockWithDefaultItem("robusium_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().harvestLevel(4).hardnessAndResistance(65, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().harvestLevel(4).strength(65, 9)));
 	
 	// HAMMER
 	public static final RegistryObject<Block> STEEL_ORE = registerBlockWithDefaultItem("steel_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().harvestLevel(4).hardnessAndResistance(3, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().harvestLevel(4).strength(3, 9)));
 	
 	
 	public static final RegistryObject<Block> XP_ORE = registerBlockWithDefaultItem("xp_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().harvestLevel(4).hardnessAndResistance(3, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().harvestLevel(4).strength(3, 9)));
 	
 	
 	public static final RegistryObject<Block> ENDER_ORE = registerBlockWithDefaultItem("ender_ore", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().harvestLevel(4).hardnessAndResistance(3, 9)));
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().harvestLevel(4).strength(3, 9)));
 	
 	
 	
 	/* ----------------------------------------------- BLOCKS ----------------------------------------------- */
-
 	
 	public static final RegistryObject<IFRobusiumBlock> ROBUSIUM_BLOCK = registerBlockWithDefaultItem("robusium_block", () 
-			-> new IFRobusiumBlock(AbstractBlock.Properties.create(Material.ROCK, MaterialColor.BLACK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(120, 40)));
+			-> new IFRobusiumBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(120, 40)));
 	
 	public static final RegistryObject<IFRobusiumGlassBlock> ROBUSIUM_GLASS = registerBlockWithDefaultItem("robusium_glass", () 
-			-> new IFRobusiumGlassBlock(AbstractBlock.Properties.create(Material.GLASS).sound(SoundType.GLASS).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(120, 9)
-					.notSolid()
-					.setOpaque(IFRobusiumGlassBlock::isntSolid)
-					.setAllowsSpawn(IFRobusiumGlassBlock::neverAllowSpawn)
-					.setSuffocates(IFRobusiumGlassBlock::isntSolid)
-					.setBlocksVision(IFRobusiumGlassBlock::isntSolid)));  
+			-> new IFRobusiumGlassBlock(AbstractBlock.Properties.of(Material.GLASS).sound(SoundType.GLASS).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(120, 9)
+					.noOcclusion()
+					.isValidSpawn(IFRobusiumGlassBlock::neverAllowSpawn)
+					.isSuffocating(IFRobusiumGlassBlock::isntSolid)
+					.isViewBlocking(IFRobusiumGlassBlock::isntSolid)));  
 
     public static final RegistryObject<Block> COMPRESSED_COBBLE = registerBlockWithDefaultItem("compressed_cobble", () 
-    		-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(4, 12)));
+    		-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(4, 12)));
     
     public static final RegistryObject<Block> STEEL_BLOCK = registerBlockWithDefaultItem("steel_block", () 
-			-> new Block(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(3, 9)));	
+			-> new Block(AbstractBlock.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().strength(3, 9)));	
     
     
 	/* ----------------------------------------------- TNT ----------------------------------------------- */
 
     
     public static final RegistryObject<Block> LAVA_TNT = registerBlockWithDefaultItem("lava_tnt", () 
-    		-> new IFLavaTNTBlock(AbstractBlock.Properties.create(Material.TNT).sound(SoundType.SCAFFOLDING).setLightLevel((state) -> {
+    		-> new IFLavaTNTBlock(AbstractBlock.Properties.of(Material.EXPLOSIVE).sound(SoundType.SCAFFOLDING).lightLevel((state) -> {
   		      return 5;})));
     
     public static final RegistryObject<Block> CHARGED_TNT = registerBlockWithDefaultItem("charged_tnt", () 
-    		-> new IFChargedTNTBock(AbstractBlock.Properties.create(Material.TNT).sound(SoundType.SCAFFOLDING).setLightLevel((state) -> {
+    		-> new IFChargedTNTBock(AbstractBlock.Properties.of(Material.EXPLOSIVE).sound(SoundType.SCAFFOLDING).lightLevel((state) -> {
   		      return 5;})));
     
     public static final RegistryObject<Block> ICE_TNT = registerBlockWithDefaultItem("ice_tnt", () 
-    		-> new IFIceTNTBlock(AbstractBlock.Properties.create(Material.TNT).sound(SoundType.BAMBOO)));
+    		-> new IFIceTNTBlock(AbstractBlock.Properties.of(Material.EXPLOSIVE).sound(SoundType.BAMBOO)));
+    
+    public static final RegistryObject<Block> CHUNK_TNT = registerBlockWithDefaultItem("chunk_tnt", () 
+    		-> new IFChunkTNTBlock(AbstractBlock.Properties.of(Material.EXPLOSIVE).sound(SoundType.BAMBOO)));
+    
     
     
 	/* ----------------------------------------------- FLOWERS ----------------------------------------------- */
 
     
     public static final RegistryObject<IFPoisonFlower> POISON_FLOWER = registerBlockWithDefaultItem("poison_flower", () 
-    		-> new IFPoisonFlower(Effects.POISON, 10, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)));
+    		-> new IFPoisonFlower(Effects.POISON, 10, AbstractBlock.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.CROP)));
     
     public static final RegistryObject<IFMagicFlower> MAGIC_FLOWER = registerBlockWithDefaultItem("magic_flower", () 
-    		-> new IFMagicFlower(Effects.INSTANT_DAMAGE, 1, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)));
+    		-> new IFMagicFlower(Effects.HARM, 1, AbstractBlock.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.CROP)));
     
     public static final RegistryObject<IFSlownessFlower> SLOWNESS_FLOWER = registerBlockWithDefaultItem("slowness_flower", () 
-    		-> new IFSlownessFlower(Effects.SLOWNESS, 10, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)));
+    		-> new IFSlownessFlower(Effects.MOVEMENT_SLOWDOWN, 10, AbstractBlock.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.CROP)));
     
     
 	/* ----------------------------------------------- TEST AREA 51 ZONE ----------------------------------------------- */
 
     
-    public static final RegistryObject<IFBlockMulti> ENCHANTED_BLOCK = registerBlockWithDefaultItem("enchanted_block", () 
-    		-> new IFBlockMulti(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE)));
-    
     public static final RegistryObject<IFIronFurnaceBlock> IRON_FURNACE = registerBlockWithDefaultItem("iron_furnace", () 
-    		-> new IFIronFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL).hardnessAndResistance(3, 9)));
+    		-> new IFIronFurnaceBlock(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.ANVIL).strength(3, 9)));
     
     public static final RegistryObject<IFObsidianFurnaceBlock> OBSIDIAN_FURNACE = registerBlockWithDefaultItem("obsidian_furnace", () 
-    		-> new IFObsidianFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL).hardnessAndResistance(3, 9)));
+    		-> new IFObsidianFurnaceBlock(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.ANVIL).strength(3, 9)));
     
     
     public static final RegistryObject<IFCommonItemFilterBlock> COMMON_ITEM_FILTER = registerBlockWithDefaultItem("common_item_filter", () 
-    		-> new IFCommonItemFilterBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL)));
+    		-> new IFCommonItemFilterBlock(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.ANVIL)));
     
     
     public static final RegistryObject<IFSingleItemChestBlock> SINGLE_ITEM_CHEST_BIG = registerBlockWithDefaultItem("single_item_chest_big", () 
-    		-> new IFSingleItemChestBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.ANVIL)));
+    		-> new IFSingleItemChestBlock(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.ANVIL)));
  
     
     public static final RegistryObject<IFTrashCanBlock> TRASH_CAN = registerBlockWithDefaultItem("trash_can", () 
-    		-> new IFTrashCanBlock(AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.SLIME)));
+    		-> new IFTrashCanBlock(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.SLIME_BLOCK)));
     
     
     
 	/* ----------------------------------------------- REGISTERING ----------------------------------------------- */
-	
-    
-  
-	
+
 	public static <T extends Block> RegistryObject<T> registerBlockWithDefaultItem(String name, Supplier<? extends T> blockSupplier)
 	{
 		RegistryObject<T> block = BLOCKS.register(name, blockSupplier);
-		IFItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().group(Main.ICEFEELING)));
+		IFItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(Main.ICEFEELING)));
 		return block;
 	}
 

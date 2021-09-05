@@ -39,10 +39,10 @@ public class IFMeteorHeadEntity extends MonsterEntity {
 	public IFMeteorHeadEntity(EntityType<IFMeteorHeadEntity> type, World worldIn) {
 		super(type, worldIn);
 
-		this.experienceValue = 100;
+		this.xpReward = 100;
 
-		this.setPathPriority(PathNodeType.WATER, -1.0F);
-		this.setPathPriority(PathNodeType.WATER_BORDER, -1.0F);
+		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+		this.setPathfindingMalus(PathNodeType.WATER_BORDER, -1.0F);
 
 	}
 
@@ -61,6 +61,7 @@ public class IFMeteorHeadEntity extends MonsterEntity {
 		return 7.0F;
 	}
 
+	@SuppressWarnings("deprecation")
 	public float getBlockPathWeight(BlockPos pos, IWorldReader worldIn) {
 		return worldIn.getBlockState(pos).isAir() ? 10.0F : 0.0F;
 	}
@@ -75,50 +76,52 @@ public class IFMeteorHeadEntity extends MonsterEntity {
 	}
 
 	@Override
-	public void livingTick() {
-		if (this.world.isRemote) {
-			if (this.rand.nextInt(24) == 0 && !this.isSilent()) {
-				this.world.playSound(this.getPosX() + 0.5D, this.getPosY() + 0.5D, this.getPosZ() + 0.5D,
-						SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE, this.getSoundCategory(),
-						1.0F + this.rand.nextFloat(), this.rand.nextFloat() * 0.7F + 0.3F, false);
+	public void tick() {
+		if (this.level.isClientSide) {
+			if (this.random.nextInt(24) == 0 && !this.isSilent()) {
+				this.level.playLocalSound(this.getX() + 0.5D, this.getY() + 0.5D, this.getZ() + 0.5D,
+						SoundEvents.BLASTFURNACE_FIRE_CRACKLE, this.getSoundSource(),
+						1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
 			}
 
 			double a = Math.random();
 			if (a <= 0.08) {
 
 				for (int i = 0; i < 2; ++i) {
-					this.world.addParticle(ParticleTypes.FALLING_OBSIDIAN_TEAR, this.getPosXRandom(0.5D),
-							this.getPosYRandom(), this.getPosZRandom(0.5D), 0.0D, 0.0D, 0.0D);
+					this.level.addParticle(ParticleTypes.FALLING_OBSIDIAN_TEAR, this.getRandomX(0.5D),
+							this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.0D, 0.0D);
 				}
 
 			}
 		}
 
-		super.livingTick();
+		super.tick();
 	}
 
 	@Override
-	public boolean isWaterSensitive() {
+	public boolean isSensitiveToWater() {
 		return true;
 	}
 
 	public static AttributeModifierMap.MutableAttribute registerAttributes() {
 
-		return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.FOLLOW_RANGE, 48.0D)
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, (double) 0.23F)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 8.0D).createMutableAttribute(Attributes.ARMOR, 15.0D)
-				.createMutableAttribute(Attributes.MAX_HEALTH, 30.0D)
-				.createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 5.0D);
+		return MonsterEntity.createMonsterAttributes()
+				.add(Attributes.FOLLOW_RANGE, 48.0D)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.23F)
+				.add(Attributes.ATTACK_DAMAGE, 8.0D)
+				.add(Attributes.ARMOR, 15.0D)
+				.add(Attributes.MAX_HEALTH, 30.0D)
+				.add(Attributes.ARMOR_TOUGHNESS, 5.0D);
 
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		if (!super.attackEntityAsMob(entityIn)) {
+	public boolean doHurtTarget(Entity entityIn) {
+		if (!super.doHurtTarget(entityIn)) {
 			return false;
 		} else {
 			if (entityIn instanceof LivingEntity) {
-				((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.GLOWING, 100));
+				((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.GLOWING, 100));
 			}
 
 			return true;
@@ -129,12 +132,12 @@ public class IFMeteorHeadEntity extends MonsterEntity {
 	public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason,
 			@Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 
-		setRandomEffect(rand);
+		setRandomEffect(random);
 
 		Effect effect = this.effect;
 
 		if (effect != null) {
-			this.addPotionEffect(new EffectInstance(effect, Integer.MAX_VALUE));
+			this.addEffect(new EffectInstance(effect, Integer.MAX_VALUE));
 		}
 
 		return spawnDataIn;
@@ -147,11 +150,11 @@ public class IFMeteorHeadEntity extends MonsterEntity {
 	public void setRandomEffect(Random rand) {
 		int i = rand.nextInt(5);
 		if (i <= 1) {
-			this.effect = Effects.STRENGTH;
+			this.effect = Effects.DAMAGE_BOOST;
 		} else if (i <= 3) {
-			this.effect = Effects.SPEED;
+			this.effect = Effects.MOVEMENT_SPEED;
 		} else if (i <= 4) {
-			this.effect = Effects.RESISTANCE;
+			this.effect = Effects.DAMAGE_RESISTANCE;
 		}
 
 	}
@@ -165,17 +168,17 @@ public class IFMeteorHeadEntity extends MonsterEntity {
 			this.meteor = meteor;
 		}
 
-		public void startExecuting() {
-			super.startExecuting();
+		public void start() {
+			super.start();
 		}
 
 		/**
 		 * Reset the task's internal state. Called when this task is interrupted by
 		 * another one
 		 */
-		public void resetTask() {
-			super.resetTask();
-			this.meteor.setAggroed(false);
+		public void stop() {
+			super.stop();
+			this.meteor.setAggressive(false);
 		}
 	}
 }

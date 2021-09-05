@@ -24,21 +24,21 @@ public class IFTrashCanBlock extends Block {
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if (worldIn.isRemote) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		if (worldIn.isClientSide) {
 			return ActionResultType.SUCCESS;
 		} else {
-			this.interactWith(worldIn, pos, player);
+			this.openContainer(worldIn, pos, player);
 			return ActionResultType.CONSUME;
 		}
 	}
 
 	
-	private void interactWith(World world, BlockPos pos, PlayerEntity player) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+	private void openContainer(World world, BlockPos pos, PlayerEntity player) {
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof INamedContainerProvider) {
 			NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity,
-					tileEntity.getPos());
+					tileEntity.getBlockPos());
 		}
 	}
 	
@@ -53,9 +53,9 @@ public class IFTrashCanBlock extends Block {
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		if (stack.hasDisplayName()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (stack.hasCustomHoverName()) {
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
 			if (tileentity instanceof IFTrashCanTileEntity) {
 				((IFTrashCanTileEntity) tileentity).setCustomName(stack.getDisplayName());
 			}

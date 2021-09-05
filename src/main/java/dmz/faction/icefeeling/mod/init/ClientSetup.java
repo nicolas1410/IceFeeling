@@ -24,15 +24,15 @@ public class ClientSetup {
 		
 	// GUIS	
 	
-	ScreenManager.registerFactory(IFTileRegistry.IRON_FURNACE_CONTAINER.get(), IFIronFurnaceScreen::new);
+	ScreenManager.register(IFTileRegistry.IRON_FURNACE_CONTAINER.get(), IFIronFurnaceScreen::new);
 	
-	ScreenManager.registerFactory(IFTileRegistry.OBSIDIAN_FURNACE_CONTAINER.get(), IFObsidianFurnaceScreen::new);
+	ScreenManager.register(IFTileRegistry.OBSIDIAN_FURNACE_CONTAINER.get(), IFObsidianFurnaceScreen::new);
 
-	ScreenManager.registerFactory(IFTileRegistry.COMMON_ITEM_FILTER_CONTAINER.get(), IFCommonItemFilterScreen::new);
+	ScreenManager.register(IFTileRegistry.COMMON_ITEM_FILTER_CONTAINER.get(), IFCommonItemFilterScreen::new);
 	
-	ScreenManager.registerFactory(IFTileRegistry.SINGLE_ITEM_CHEST_CONTAINER_BIG.get(), IFSingleItemChestScreen::new);
+	ScreenManager.register(IFTileRegistry.SINGLE_ITEM_CHEST_CONTAINER_BIG.get(), IFSingleItemChestScreen::new);
 
-	ScreenManager.registerFactory(IFTileRegistry.TRASH_CAN_CONTAINER.get(), IFTrashCanScreen::new);
+	ScreenManager.register(IFTileRegistry.TRASH_CAN_CONTAINER.get(), IFTrashCanScreen::new);
 	
 	// HUD
 	//MinecraftForge.EVENT_BUS.register(new IFArmorHUD());

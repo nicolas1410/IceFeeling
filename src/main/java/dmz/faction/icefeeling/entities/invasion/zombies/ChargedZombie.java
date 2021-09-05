@@ -39,7 +39,7 @@ public class ChargedZombie extends MonsterEntity implements IChargeableMob {
 	}
 
 	@Override
-	public boolean isCharged() {
+	public boolean isPowered() {
 		return true;
 	}
 
@@ -56,42 +56,40 @@ public class ChargedZombie extends MonsterEntity implements IChargeableMob {
 
 	public static AttributeModifierMap.MutableAttribute registerAttributes() {
 
-		return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.FOLLOW_RANGE, 48.0D)
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, (double) 0.46F)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 35.0D)
-				.createMutableAttribute(Attributes.ARMOR, 30.0D)
-				.createMutableAttribute(Attributes.MAX_HEALTH, 100.0D)
-				.createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 5.0D)
-				.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
+		return MonsterEntity.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 48.0D)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.46F).add(Attributes.ATTACK_DAMAGE, 35.0D)
+				.add(Attributes.ARMOR, 30.0D).add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.ARMOR_TOUGHNESS, 5.0D)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
 
 	}
 
-	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		if (!super.attackEntityAsMob(entityIn)) {
-			return false;
-		} else {
-			if (entityIn instanceof LivingEntity) {
-				((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100));
-			}
 
+	@Override
+	public boolean doHurtTarget(Entity entity) {
+		if (super.doHurtTarget(entity)) {
+			if (entity instanceof LivingEntity) {
+				if (Math.random() < 0.5) {
+					((LivingEntity) entity).addEffect(new EffectInstance(Effects.BLINDNESS, 100));
+				}
+			}
 			return true;
+		} else {
+			return false;
 		}
 	}
 
 	@Nullable
-	public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason,
-			@Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+	public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason,@Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 
-		setRandomEffect(rand);
+		setRandomEffect(random);
 
 		Effect effect = this.effect;
 
 		if (effect != null) {
-			this.addPotionEffect(new EffectInstance(effect, Integer.MAX_VALUE));
+			this.addEffect(new EffectInstance(effect, Integer.MAX_VALUE));
 		}
 
-		if (this.rand.nextFloat() < 0.05F) {
+		if (this.random.nextFloat() < 0.05F) {
 			this.setLeftHanded(true);
 		} else {
 			this.setLeftHanded(false);
@@ -101,14 +99,14 @@ public class ChargedZombie extends MonsterEntity implements IChargeableMob {
 	}
 
 	public void setEffectOnSpawn() {
-		this.effect = Effects.SPEED;
+		this.effect = Effects.MOVEMENT_SPEED;
 	}
 
 	public void setRandomEffect(Random rand) {
 		int i = rand.nextInt(5);
-		this.effect = Effects.SPEED;
+		this.effect = Effects.MOVEMENT_SPEED;
 		if (i <= 1) {
-			this.effect = Effects.STRENGTH;
+			this.effect = Effects.DAMAGE_BOOST;
 		} else if (i <= 3) {
 			this.effect = Effects.REGENERATION;
 		} else if (i <= 4) {

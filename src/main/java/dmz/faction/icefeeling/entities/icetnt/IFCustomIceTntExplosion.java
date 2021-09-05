@@ -53,39 +53,39 @@ public class IFCustomIceTntExplosion extends Explosion implements IForgeBlock {
 
 
 	private boolean isWaterFull(BlockPos pos, World world, BlockState state, FluidState fstate) {
-		return state == Blocks.WATER.getDefaultState();
+		return state == Blocks.WATER.defaultBlockState();
 
 	}
 
 	private boolean isWaterOrFalling(BlockPos pos, World world, BlockState state, FluidState fstate) {
-		return fstate == Fluids.FLOWING_WATER.getFlowingFluidState(1, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(2, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(3, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(4, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(5, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(6, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(7, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(8, true)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(1, false)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(2, false)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(3, false)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(4, false)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(5, false)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(6, false)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(7, false)
-				|| fstate == Fluids.FLOWING_WATER.getFlowingFluidState(8, false);
+		return fstate == Fluids.FLOWING_WATER.getFlowing(1, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(2, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(3, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(4, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(5, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(6, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(7, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(8, true)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(1, false)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(2, false)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(3, false)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(4, false)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(5, false)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(6, false)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(7, false)
+				|| fstate == Fluids.FLOWING_WATER.getFlowing(8, false);
 
 	}
 	
 	private void addSoundsAtExplosion() {
 
-		world.playSound((PlayerEntity) null, this.x, this.y, this.z, SoundEvents.BLOCK_SNOW_PLACE, SoundCategory.BLOCKS,
+		world.playSound((PlayerEntity) null, this.x, this.y, this.z, SoundEvents.SNOW_PLACE, SoundCategory.BLOCKS,
 				5.0F, 1.0F);
 
 	}
 
 	@Override
-	public void doExplosionA() {
+	public void explode() {
 		double posX = this.x;
 		double posY = this.y;
 		double posZ = this.z;
@@ -96,12 +96,12 @@ public class IFCustomIceTntExplosion extends Explosion implements IForgeBlock {
 
 		if (this.isWaterFull(pos, world, bstate, fstate)) {
 
-			world.setBlockState(pos, Blocks.PACKED_ICE.getDefaultState(), 3);
+			world.setBlock(pos, Blocks.PACKED_ICE.defaultBlockState(), 3);
 
 		}
 		if (this.isWaterOrFalling(pos, world, bstate, fstate)) {
 
-			world.setBlockState(pos, Blocks.ICE.getDefaultState(), 3);
+			world.setBlock(pos, Blocks.ICE.defaultBlockState(), 3);
 
 		}
 	}

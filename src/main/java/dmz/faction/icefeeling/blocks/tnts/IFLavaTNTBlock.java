@@ -30,124 +30,107 @@ import net.minecraftforge.common.extensions.IForgeBlock;
 
 public class IFLavaTNTBlock extends Block implements IForgeBlock {
 
-
 	public static final BooleanProperty UNSTABLE = BlockStateProperties.UNSTABLE;
 
-
-	public IFLavaTNTBlock(AbstractBlock.Properties properties) 
-	{
+	public IFLavaTNTBlock(AbstractBlock.Properties properties) {
 		super(properties);
-	    this.setDefaultState(this.getDefaultState().with(UNSTABLE, Boolean.valueOf(false)));
+		this.registerDefaultState(this.defaultBlockState().setValue(UNSTABLE, Boolean.valueOf(false)));
 
 	}
-	
+
 	@Override
-	public void catchFire(BlockState state, World world, BlockPos pos, @Nullable Direction face, @Nullable LivingEntity igniter)
-	{
-		if (!world.isRemote) 
-		{
-			IFLavaTNTEntity lavaTntEntity = new IFLavaTNTEntity(world, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, igniter);
-			world.addEntity(lavaTntEntity);
-			world.playSound((PlayerEntity)null, lavaTntEntity.getPosX(), lavaTntEntity.getPosY(), lavaTntEntity.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	public void catchFire(BlockState state, World world, BlockPos pos, @Nullable Direction face,
+			@Nullable LivingEntity igniter) {
+		if (!world.isClientSide) {
+			IFLavaTNTEntity lavaTntEntity = new IFLavaTNTEntity(world, (double) pos.getX() + 0.5D, (double) pos.getY(),
+					(double) pos.getZ() + 0.5D, igniter);
+			world.addFreshEntity(lavaTntEntity);
+			world.playSound((PlayerEntity) null, lavaTntEntity.getX(), lavaTntEntity.getY(),
+					lavaTntEntity.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 	}
-    
-	
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) 
-	{
-		      
-		if (!oldState.isIn(state.getBlock())) 
-		{
-		         if (worldIn.isBlockPowered(pos)) 
-		         {
-		            catchFire(state, worldIn, pos, null, null);
-		            worldIn.removeBlock(pos, false);
-		         }
 
-		 }
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+
+		if (!oldState.is(state.getBlock())) {
+			if (worldIn.hasNeighborSignal(pos)) {
+				catchFire(state, worldIn, pos, null, null);
+				worldIn.removeBlock(pos, false);
+			}
+
+		}
 	}
 
-	
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) 
-	{
-		if (worldIn.isBlockPowered(pos)) 
-		{
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+		if (worldIn.hasNeighborSignal(pos)) {
 			catchFire(state, worldIn, pos, null, null);
-		    worldIn.removeBlock(pos, false);
+			worldIn.removeBlock(pos, false);
 		}
 	}
-	
+
 	/**
-	 * Called before the Block is set to air in the world. Called regardless of if the player's tool can actually collect
-	* this block
+	 * Called before the Block is set to air in the world. Called regardless of if
+	 * the player's tool can actually collect this block
 	 */
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) 
-	{
-		if (!worldIn.isRemote() && !player.isCreative() && state.get(UNSTABLE)) 
-		{
-		         catchFire(state, worldIn, pos, null, null);
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		if (!worldIn.isClientSide() && !player.isCreative() && state.getValue(UNSTABLE)) {
+			catchFire(state, worldIn, pos, null, null);
 		}
 
-		      super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 
 	/**
-	* Called when this Block is destroyed by an Explosion
-	*/
+	 * Called when this Block is destroyed by an Explosion
+	 */
 	@Override
-	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn)
-	{
-		
-		if (!worldIn.isRemote) 
-		{
-			IFLavaTNTEntity lavaTntEntity = new IFLavaTNTEntity(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, explosionIn.getExplosivePlacedBy());
-			lavaTntEntity.setFuse((short)(worldIn.rand.nextInt(lavaTntEntity.getFuse() / 4) + lavaTntEntity.getFuse() / 8));
-		     worldIn.addEntity(lavaTntEntity);
-		     
+	public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn) {
+
+		if (!worldIn.isClientSide) {
+			IFLavaTNTEntity lavaTntEntity = new IFLavaTNTEntity(worldIn, (double) pos.getX() + 0.5D,
+					(double) pos.getY(), (double) pos.getZ() + 0.5D, explosionIn.getSourceMob());
+			lavaTntEntity
+					.setFuse((short) (worldIn.random.nextInt(lavaTntEntity.getFuse() / 4) + lavaTntEntity.getFuse() / 8));
+			worldIn.addFreshEntity(lavaTntEntity);
+
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) 
-	{
-		ItemStack itemstack = player.getHeldItem(handIn);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		ItemStack itemstack = player.getItemInHand(handIn);
 		Item item = itemstack.getItem();
-		if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE) 
-		{
-		    return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
-		    
+		if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE) {
+			return super.use(state, worldIn, pos, player, handIn, hit);
+
 		} else {
-			catchFire(state, worldIn, pos, hit.getFace(), player);
-		    worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
-		    if (!player.isCreative()) 
-		    {
-		    	if (item == Items.FLINT_AND_STEEL) 
-		    	{
-		    		itemstack.damageItem(1, player, (player1) -> 
-		    		{
-		    			player1.sendBreakAnimation(handIn);
-		    		});
-		    	} else {
-		    		itemstack.shrink(1);
-		    	}
-		    }
-		    return ActionResultType.func_233537_a_(worldIn.isRemote);
+			catchFire(state, worldIn, pos, hit.getDirection(), player);
+			worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+			if (!player.isCreative()) {
+				if (item == Items.FLINT_AND_STEEL) {
+					itemstack.hurtAndBreak(1, player, (player1) -> {
+						player1.broadcastBreakEvent(handIn);
+					});
+				} else {
+					itemstack.shrink(1);
+				}
 			}
+			return ActionResultType.sidedSuccess(worldIn.isClientSide);
+		}
 	}
-	
+
 	@Override
-	public void onProjectileCollision(World worldIn, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile) 
-	{
-		if (!worldIn.isRemote)
-		{
-			Entity entity = projectile.func_234616_v_();
-			if (projectile.isBurning()) 
-			{
-				BlockPos blockpos = hit.getPos();
-				catchFire(state, worldIn, blockpos, null, entity instanceof LivingEntity ? (LivingEntity)entity : null);
+	public void onProjectileHit(World worldIn, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile) {
+		if (!worldIn.isClientSide) {
+			Entity entity = projectile.getEntity();
+			if (projectile.isOnFire()) {
+				BlockPos blockpos = hit.getBlockPos();
+				catchFire(state, worldIn, blockpos, null,
+						entity instanceof LivingEntity ? (LivingEntity) entity : null);
 				worldIn.removeBlock(blockpos, false);
 			}
 		}
@@ -155,19 +138,17 @@ public class IFLavaTNTBlock extends Block implements IForgeBlock {
 	}
 
 	/**
-	* Return whether this block can drop from an explosion.
-	*/
-	
+	 * Return whether this block can drop from an explosion.
+	 */
+
 	@Override
-	public boolean canDropFromExplosion(Explosion explosionIn) 
-	{
+	public boolean dropFromExplosion(Explosion explosionIn) {
 		return false;
 	}
-	
+
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) 
-	{
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(UNSTABLE);
 	}
-	
+
 }

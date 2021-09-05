@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.INameable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -27,6 +28,7 @@ public abstract class IFTileEntityInventory extends TileEntity
 
 	public NonNullList<ItemStack> inventory;
 	protected ITextComponent name;
+	protected BlockPos pos = this.worldPosition;
 
 	public IFTileEntityInventory(TileEntityType<?> tileEntityTypeIn, int inventorySize) {
 		super(tileEntityTypeIn);
@@ -36,29 +38,27 @@ public abstract class IFTileEntityInventory extends TileEntity
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT nbtTag = new CompoundNBT();
-		this.write(nbtTag);
-		this.markDirty();
-		return new SUpdateTileEntityPacket(getPos(), -1, nbtTag);
+		this.save(nbtTag);
+		this.setChanged();
+		return new SUpdateTileEntityPacket(this.worldPosition, -1, nbtTag);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		CompoundNBT tag = pkt.getNbtCompound();
-		this.read(world.getBlockState(pos), tag);
-		this.markDirty();
-		world.notifyBlockUpdate(pos, world.getBlockState(pos).getBlock().getDefaultState(), world.getBlockState(pos),
-				2);
+		CompoundNBT tag = pkt.getTag();
+		this.load(level.getBlockState(this.worldPosition), tag);
+		this.setChanged();
+		level.markAndNotifyBlock(this.worldPosition, level.getChunkAt(this.worldPosition), level.getBlockState(this.worldPosition).getBlock().defaultBlockState(), level.getBlockState(this.worldPosition), 2, 2);
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT compound = new CompoundNBT();
 
-		this.write(compound);
+		this.save(compound);
 		return compound;
 	}
 
-	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
 		return this.IisItemValidForSlot(index, stack);
 	}
@@ -73,17 +73,17 @@ public abstract class IFTileEntityInventory extends TileEntity
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return IcanExtractItem(index, stack, direction);
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
 		return this.isItemValidForSlot(index, itemStackIn);
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.inventory.size();
 	}
 
@@ -98,49 +98,45 @@ public abstract class IFTileEntityInventory extends TileEntity
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.inventory.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.inventory, index, count);
+	public ItemStack removeItem(int index, int count) {
+		return ItemStackHelper.removeItem(this.inventory, index, count);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.inventory, index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return ItemStackHelper.takeItem(this.inventory, index);
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
-		ItemStack itemstack = this.inventory.get(index);
-		boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack)
-				&& ItemStack.areItemStackTagsEqual(stack, itemstack);
+	public void setItem(int index, ItemStack stack) {
 		this.inventory.set(index, stack);
 		if (stack.getCount() > this.getInventoryStackLimit()) {
 			stack.setCount(this.getInventoryStackLimit());
 		}
 	}
 
-	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		super.read(state, compound);
-		this.inventory = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
+		this.inventory = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(compound, this.inventory);
 		if (compound.contains("CustomName", 8)) {
-			this.name = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
+			this.name = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
 		}
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		ItemStackHelper.saveAllItems(compound, this.inventory);
 		if (this.name != null) {
 			compound.putString("CustomName", ITextComponent.Serializer.toJson(this.name));
@@ -149,25 +145,25 @@ public abstract class IFTileEntityInventory extends TileEntity
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.world.getTileEntity(this.pos) != this) {
+	public boolean stillValid(PlayerEntity player) {
+		if (this.level.getBlockEntity(this.pos) != this) {
 			return false;
 		} else {
-			return !(player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
+			return !(player.distanceToSqr((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
 					(double) this.pos.getZ() + 0.5D) > 64.0D);
 		}
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.inventory.clear();
 	}
 
@@ -194,9 +190,9 @@ public abstract class IFTileEntityInventory extends TileEntity
 	}
 	
 	@Override
-	public void markDirty()
+	public void setChanged()
 	{
-		super.markDirty();
+		super.setChanged();
 		
 	}
 }

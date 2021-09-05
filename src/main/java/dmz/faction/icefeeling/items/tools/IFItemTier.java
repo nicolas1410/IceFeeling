@@ -12,35 +12,35 @@ public enum IFItemTier implements IItemTier {
 	//int harvestLevelIn, int Durability, float efficiency, float attackDamage, int enchantability
 	ADMIN_SWORD(5, 100000, 12.0F, 11.0F, 5, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	}),
 	JADE		(4, 560, 14.0F, 3.0F, 25, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	}),
 	OBSIDIAN	(3, 4505, 9.0F, 6, 15, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	}),
 	TITANITE	(4, 6808, 10.0F, 7, 20, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	}),
 	MYTHRIL		(4, 2545, 12.0F, 8, 5, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	}),
 	OPAL		(5, 1648, 11.0F, 9, 5, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	}),
 	FIRE_OPAL	(0, 1412, 0, 14, 0, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	}),
 	ENCHANTED_SWORD	(0, 2500, 0, 4.5F, 1, () -> 
 	{
-			return Ingredient.fromItems(IFItems.ENCHANTED_GEM.get());
+			return Ingredient.of(IFItems.ENCHANTED_GEM.get());
 	});
 	
 		   /*IRON(2, 250, 6.0F, 2.0F, 14, () -> {
@@ -75,33 +75,34 @@ public enum IFItemTier implements IItemTier {
 	
 	
 	@Override
-	public int getMaxUses() {
+	public int getUses() {
 		return maxUses;
 	}
 
 	@Override
-	public float getEfficiency() {
+	public float getSpeed() {
 		return efficiency;
 	}
 
 	@Override
-	public float getAttackDamage() {
+	public float getAttackDamageBonus() {
 		return attackDamage;
 	}
 
 	@Override
-	public int getHarvestLevel() {
+	public int getLevel() {
 		return harvestLevel;
 	}
 
 	@Override
-	public int getEnchantability() {
+	public int getEnchantmentValue() {
 		return enchantability;
 	}
 
 	@Override
-	public Ingredient getRepairMaterial() {
-		return repairMaterial.getValue();
+	public Ingredient getRepairIngredient() {
+		return repairMaterial.get();
 	}
+
 
 }

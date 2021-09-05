@@ -31,9 +31,9 @@ public class IFOpalArmor extends ArmorItem {
     {
 		if(hasFullSet(stack, slot, player)) 
 		{
-			player.addPotionEffect(new EffectInstance(Effects.SPEED, 0, 0));
-			player.addPotionEffect(new EffectInstance(Effects.DOLPHINS_GRACE, 0, 0));
-			player.addPotionEffect(new EffectInstance(Effects.HERO_OF_THE_VILLAGE, 0, 0));
+			player.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 0, 0));
+			player.addEffect(new EffectInstance(Effects.DOLPHINS_GRACE, 0, 0));
+			player.addEffect(new EffectInstance(Effects.HERO_OF_THE_VILLAGE, 0, 0));
 
 		}				
 
@@ -41,10 +41,10 @@ public class IFOpalArmor extends ArmorItem {
 	
 	private boolean hasFullSet(ItemStack stack, EquipmentSlotType slot, PlayerEntity player) 
 	{
-		return 	   player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IFItems.OPAL_HELMET.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == IFItems.OPAL_CHESTPLATE.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == IFItems.OPAL_LEGGINGS.get()
-				&& player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == IFItems.OPAL_BOOTS.get();
+		return 	   player.getItemBySlot(EquipmentSlotType.HEAD).getItem() == IFItems.OPAL_HELMET.get()
+				&& player.getItemBySlot(EquipmentSlotType.CHEST).getItem() == IFItems.OPAL_CHESTPLATE.get()
+				&& player.getItemBySlot(EquipmentSlotType.LEGS).getItem() == IFItems.OPAL_LEGGINGS.get()
+				&& player.getItemBySlot(EquipmentSlotType.FEET).getItem() == IFItems.OPAL_BOOTS.get();
 	}
 		
 	@Override

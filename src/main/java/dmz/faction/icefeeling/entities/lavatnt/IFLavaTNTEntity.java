@@ -25,30 +25,30 @@ public class IFLavaTNTEntity extends Entity {
 
 	IFCustomLavaTntExplosion lavaTntExplosion;
 
-	private static final DataParameter<Integer> FUSE_CHARGED = EntityDataManager.createKey(IFLavaTNTEntity.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> FUSE_LAVA = EntityDataManager.defineId(IFLavaTNTEntity.class, DataSerializers.INT);
 
-	private int fuse_charged = 40;
+	private int fuse_lava = 40;
 	LivingEntity tntPlacedBy;
 
 	public IFLavaTNTEntity(EntityType<? extends IFLavaTNTEntity> lavaTntEntity, World worldIn) {
 		super(lavaTntEntity, worldIn);
-		this.preventEntitySpawning = true;
+		this.blocksBuilding = true;
 	}
 
 	public IFLavaTNTEntity(World worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
 		this(IFEntityRegister.LAVA_TNT_ENTITY.get(), worldIn);
-		this.setPosition(x, y, z);
-		double d0 = worldIn.rand.nextDouble() * (double) ((float) Math.PI * 2F);
-		this.setMotion(-Math.sin(d0) * 0.02D, (double) 0.2F, -Math.cos(d0) * 0.02D);
-		this.setFuse(fuse_charged);
-		this.prevPosX = x;
-		this.prevPosY = y;
-		this.prevPosZ = z;
+		this.setPos(x, y, z);
+		double d0 = worldIn.random.nextDouble() * (double) ((float) Math.PI * 2F);
+		this.setDeltaMovement(-Math.sin(d0) * 0.02D, (double) 0.2F, -Math.cos(d0) * 0.02D);
+		this.setFuse(fuse_lava);
+		this.xo = x;
+		this.yo = y;
+		this.zo = z;
 		this.tntPlacedBy = igniter;
 	}
 
 	protected void registerData() {
-		this.dataManager.register(FUSE_CHARGED, 10);
+		this.entityData.define(FUSE_LAVA, 10);
 	}
 
 	protected boolean canTriggerWalking() {
@@ -60,26 +60,26 @@ public class IFLavaTNTEntity extends Entity {
 	}
 
 	public void tick() {
-		if (!this.hasNoGravity()) {
-			this.setMotion(this.getMotion().add(0.0D, -0.04D, 0.0D));
+		if (!this.isNoGravity()) {
+			this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
 		}
 
-		this.move(MoverType.SELF, this.getMotion());
-		this.setMotion(this.getMotion().scale(0.98D));
+		this.move(MoverType.SELF, this.getDeltaMovement());
+		this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
 		if (this.onGround) {
-			this.setMotion(this.getMotion().mul(0.7D, -0.5D, 0.7D));
+			this.setDeltaMovement(this.getDeltaMovement().multiply(0.7D, -0.5D, 0.7D));
 		}
 
-		--this.fuse_charged;
-		if (this.fuse_charged <= 0) {
+		--this.fuse_lava;
+		if (this.fuse_lava <= 0) {
 			this.remove();
-			if (!this.world.isRemote) {
+			if (!this.level.isClientSide) {
 				this.explode();
 			}
 		} else {
-			this.func_233566_aG_();
-			if (this.world.isRemote) {
-				this.world.addParticle(ParticleTypes.SMOKE, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D,
+			this.updateInWaterStateAndDoFluidPushing();
+			if (this.level.isClientSide) {
+				this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.5D, this.getZ(), 0.0D,
 						0.0D, 0.0D);
 			}
 		}
@@ -103,13 +103,13 @@ public class IFLavaTNTEntity extends Entity {
 			@Nullable ExplosionContext context, double x, double y, double z, float size, boolean causesFire,
 			Explosion.Mode mode) {
 
-		IFCustomLavaTntExplosion lavaTntExplosion = new IFCustomLavaTntExplosion(world, exploder, damageSource, context, x,
+		IFCustomLavaTntExplosion lavaTntExplosion = new IFCustomLavaTntExplosion(level, exploder, damageSource, context, x,
 				y, z, size, causesFire, mode);
-		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, lavaTntExplosion))
+		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(level, lavaTntExplosion))
 			return lavaTntExplosion;
 
-		lavaTntExplosion.doExplosionA();
-		lavaTntExplosion.doExplosionB(true);
+		lavaTntExplosion.explode();
+		lavaTntExplosion.finalizeExplosion(true);
 		return lavaTntExplosion;
 
 	}
@@ -117,7 +117,7 @@ public class IFLavaTNTEntity extends Entity {
 	protected void explode() {
 		float explosionPower = 2.0F;
 
-		lavaTntExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), explosionPower,
+		lavaTntExplosion(this, this.getX(), this.getY(0.0625D), this.getZ(), explosionPower,
 				Explosion.Mode.DESTROY);
 
 	}
@@ -146,13 +146,13 @@ public class IFLavaTNTEntity extends Entity {
 	}
 
 	public void setFuse(int fuseIn) {
-		this.dataManager.set(FUSE_CHARGED, fuseIn);
-		this.fuse_charged = fuseIn;
+		this.entityData.set(FUSE_LAVA, fuseIn);
+		this.fuse_lava = fuseIn;
 	}
 
 	public void notifyDataManagerChange(DataParameter<?> key) {
-		if (FUSE_CHARGED.equals(key)) {
-			this.fuse_charged = this.getFuseDataManager();
+		if (FUSE_LAVA.equals(key)) {
+			this.fuse_lava = this.getFuseDataManager();
 		}
 
 	}
@@ -161,16 +161,30 @@ public class IFLavaTNTEntity extends Entity {
 	 * Gets the fuse from the data manager
 	 */
 	public int getFuseDataManager() {
-		return this.dataManager.get(FUSE_CHARGED);
+		return this.entityData.get(FUSE_LAVA);
 	}
 
 	public int getFuse() {
-		return this.fuse_charged;
+		return this.fuse_lava;
+	}
+	
+	@Override
+	protected void defineSynchedData() {
+		this.entityData.define(FUSE_LAVA, 80);
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+		p_213281_1_.putShort("Fuse", (short) this.getFuse());
 	}
 
+	@Override
+	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+		this.setFuse(p_70037_1_.getShort("Fuse"));
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
 }

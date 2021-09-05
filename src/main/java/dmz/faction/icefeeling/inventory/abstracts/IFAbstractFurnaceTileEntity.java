@@ -6,9 +6,9 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import dmz.faction.icefeeling.blocks.blockgui.abstracts.IFAbstractFurnaceBlock;
 import dmz.faction.icefeeling.items.consumables.IFBurnableItems;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,7 +25,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -38,13 +37,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
-		implements ITickableTileEntity, IRecipeHolder, IRecipeHelperPopulator {
+public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory implements ITickableTileEntity, IRecipeHolder, IRecipeHelperPopulator {
 
-
-	private static final int[] SLOTS_UP = new int[] { 0 };
-	private static final int[] SLOTS_DOWN = new int[] { 2, 1 };
-	private static final int[] SLOTS_HORIZONTAL = new int[] { 1 };
 
 	protected NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
 	public int burnTime;
@@ -84,10 +78,10 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	         }
 
 	      }
-
-	      public int size() {
-	         return 4;
-	      }
+	      
+	      public int getCount() {
+	          return 4;
+	       }
 	   };
 
 	private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
@@ -96,18 +90,9 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT nbtTag = new CompoundNBT();
-		this.write(nbtTag);
-		this.markDirty();
-		return new SUpdateTileEntityPacket(getPos(), -1, nbtTag);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		CompoundNBT tag = pkt.getNbtCompound();
-		this.read(world.getBlockState(pos), tag);
-		this.markDirty();
-		world.notifyBlockUpdate(pos, world.getBlockState(pos).getBlock().getDefaultState(), world.getBlockState(pos),
-				2);
+		this.save(nbtTag);
+		this.setChanged();
+		return new SUpdateTileEntityPacket(this.worldPosition, -1, nbtTag);
 	}
 
 	protected IFAbstractFurnaceTileEntity(TileEntityType<?> tileTypeIn) {
@@ -116,6 +101,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public static int getBurnTimes(ItemStack burnTime) {
 		return ForgeHooks.getBurnTime(burnTime);
 	}
@@ -125,8 +111,8 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(BlockState state, CompoundNBT nbt) {
+		super.load(state, nbt);
 		this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(nbt, this.items);
 		this.burnTime = nbt.getInt("BurnTime");
@@ -135,15 +121,15 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 		this.recipesUsed = this.getBurnTime(this.items.get(1));
 		CompoundNBT compoundnbt = nbt.getCompound("RecipesUsed");
 
-		for (String s : compoundnbt.keySet()) {
+		for (String s : compoundnbt.getAllKeys()) {
 			this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
 		}
 
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		compound.putInt("BurnTime", this.burnTime);
 		compound.putInt("CookTime", this.cookTime);
 		compound.putInt("CookTimeTotal", this.cookTimeTotal);
@@ -156,6 +142,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 		return compound;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void tick() {
 		boolean flag = this.isBurning();
@@ -164,11 +151,11 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 			--this.burnTime;
 		}
 
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			ItemStack itemstack = this.items.get(1);
 			if (this.isBurning() || !itemstack.isEmpty() && !this.items.get(0).isEmpty()) {
-				IRecipe<?> irecipe = this.world.getRecipeManager()
-						.getRecipe((IRecipeType<AbstractCookingRecipe>) this.recipeType, this, this.world).orElse(null);
+				IRecipe<?> irecipe = this.level.getRecipeManager()
+						.getRecipeFor((IRecipeType<AbstractCookingRecipe>) this.recipeType, this, this.level).orElse(null);
 				if (!this.isBurning() && this.canSmelt(irecipe)) {
 					this.burnTime = this.getBurnTime(itemstack);
 					this.recipesUsed = this.burnTime;
@@ -177,7 +164,6 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 						if (itemstack.hasContainerItem())
 							this.items.set(1, itemstack.getContainerItem());
 						else if (!itemstack.isEmpty()) {
-							Item item = itemstack.getItem();
 							itemstack.shrink(1);
 							if (itemstack.isEmpty()) {
 								this.items.set(1, itemstack.getContainerItem());
@@ -203,27 +189,26 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 
 			if (flag != this.isBurning()) {
 				flag1 = true;
-				this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(IFAbstractFurnaceBlock.LIT,
-						Boolean.valueOf(this.isBurning())), 3);
+				this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(IFAbstractFurnaceBlock.LIT,Boolean.valueOf(this.isBurning())), 3);
 			}
 		}
 
 		if (flag1) {
-			this.markDirty();
+			this.setChanged();
 		}
 
 	}
 
 	protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
 		if (!this.items.get(0).isEmpty() && recipeIn != null) {
-			ItemStack itemstack = recipeIn.getRecipeOutput();
+			ItemStack itemstack = recipeIn.getResultItem();
 			if (itemstack.isEmpty()) {
 				return false;
 			} else {
 				ItemStack itemstack1 = this.items.get(2);
 				if (itemstack1.isEmpty()) {
 					return true;
-				} else if (!itemstack1.isItemEqual(itemstack)) {
+				} else if (!itemstack1.sameItem(itemstack)) {
 					return false;
 				} else if (itemstack1.getCount() + itemstack.getCount() <= this.getInventoryStackLimit()
 						&& itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) { // Forge fix:
@@ -252,7 +237,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	private void smelt(@Nullable IRecipe<?> recipe) {
 		if (recipe != null && this.canSmelt(recipe)) {
 			ItemStack itemstack = this.items.get(0);
-			ItemStack itemstack1 = recipe.getRecipeOutput();
+			ItemStack itemstack1 = recipe.getResultItem();
 			ItemStack itemstack2 = this.items.get(2);
 			if (itemstack2.isEmpty()) {
 				this.items.set(2, itemstack1.copy());
@@ -260,7 +245,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 				itemstack2.grow(itemstack1.getCount());
 			}
 
-			if (!this.world.isRemote) {
+			if (!this.level.isClientSide) {
 				this.setRecipeUsed(recipe);
 			}
 
@@ -273,6 +258,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	protected int getBurnTime(ItemStack fuel) {
 		if (fuel.isEmpty()) {
 			return 0;
@@ -281,8 +267,9 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected int getCookTime() {
-		return this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>) this.recipeType, this, this.world).map(AbstractCookingRecipe::getCookTime).orElse(200);
+		return this.level.getRecipeManager().getRecipeFor((IRecipeType<AbstractCookingRecipe>) this.recipeType, this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(200);
 	}
 
 	public static boolean isFuel(ItemStack stack) {
@@ -325,6 +312,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 		return this.items.size();
 	}
 
+	@Override
 	public boolean isEmpty() {
 		for (ItemStack itemstack : this.items) {
 			if (!itemstack.isEmpty()) {
@@ -338,7 +326,8 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	/**
 	 * Returns the stack in the given slot.
 	 */
-	public ItemStack getStackInSlot(int index) {
+	@Override
+	public ItemStack getItem(int index) {
 		return this.items.get(index);
 	}
 
@@ -346,15 +335,17 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	 * Removes up to a specified number of items from an inventory slot and returns
 	 * them in a new stack.
 	 */
-	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.items, index, count);
+	@Override
+	public ItemStack removeItem(int index, int count) {
+		return ItemStackHelper.removeItem(this.items, index, count);
 	}
 
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.items, index);
+	@Override
+	public ItemStack removeItemNoUpdate(int index) {
+		return ItemStackHelper.takeItem(this.items, index);
 	}
 
 	/**
@@ -363,8 +354,8 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	 */
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		ItemStack itemstack = this.items.get(index);
-		boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack)
-				&& ItemStack.areItemStackTagsEqual(stack, itemstack);
+		boolean flag = !stack.isEmpty() && stack.sameItem(itemstack)
+				&& ItemStack.isSame(stack, itemstack);
 		this.items.set(index, stack);
 		if (stack.getCount() > this.getInventoryStackLimit()) {
 			stack.setCount(this.getInventoryStackLimit());
@@ -373,7 +364,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 		if (index == 0 && !flag) {
 			this.cookTimeTotal = this.getCookTime();
 			this.cookTime = 0;
-			this.markDirty();
+			this.setChanged();
 		}
 
 	}
@@ -382,11 +373,11 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	 * Don't rename this method to canInteractWith due to conflicts with Container
 	 */
 	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.world.getTileEntity(this.pos) != this) {
+		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		} else {
-			return player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
-					(double) this.pos.getZ() + 0.5D) <= 64.0D;
+			return player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D,
+					(double) this.worldPosition.getZ() + 0.5D) <= 64.0D;
 		}
 	}
 
@@ -426,27 +417,27 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	public void onCrafting(PlayerEntity player) {
 	}
 
-	public void unlockRecipes(PlayerEntity player) {
-		List<IRecipe<?>> list = this.grantStoredRecipeExperience(player.world, player.getPositionVec());
-		player.unlockRecipes(list);
+	public void awardUsedRecipesAndPopExperience(PlayerEntity player) {
+		List<IRecipe<?>> list = this.getRecipesToAwardAndPopExperience(player.level, player.getDeltaMovement());
+		player.awardRecipes(list);
 		this.recipes.clear();
 	}
 
-	public List<IRecipe<?>> grantStoredRecipeExperience(World world, Vector3d pos) {
+	public List<IRecipe<?>> getRecipesToAwardAndPopExperience(World world, Vector3d vector) {
 		List<IRecipe<?>> list = Lists.newArrayList();
 
 		for (Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
-			world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((recipe) -> {
+			world.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				splitAndSpawnExperience(world, pos, entry.getIntValue(),
-						((AbstractCookingRecipe) recipe).getExperience());
+	            createExperience(world, vector, entry.getIntValue(), ((AbstractCookingRecipe)recipe).getExperience());
+
 			});
 		}
 
 		return list;
 	}
 
-	private static void splitAndSpawnExperience(World world, Vector3d pos, int craftedAmount, float experience) {
+	private static void createExperience(World world, Vector3d pos, int craftedAmount, float experience) {
 		int i = MathHelper.floor((float) craftedAmount * experience);
 		float f = MathHelper.frac((float) craftedAmount * experience);
 		if (f != 0.0F && Math.random() < (double) f) {
@@ -454,9 +445,9 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 		}
 
 		while (i > 0) {
-			int j = ExperienceOrbEntity.getXPSplit(i);
+			int j = ExperienceOrbEntity.getExperienceValue(i);
 			i -= j;
-			world.addEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, j));
+			world.addFreshEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, j));
 		}
 
 	}
@@ -474,7 +465,7 @@ public abstract class IFAbstractFurnaceTileEntity extends IFTileEntityInventory
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(
 			net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.removed && facing != null
+		if (!this.remove && facing != null
 				&& capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing == Direction.UP)
 				return handlers[0].cast();

@@ -10,7 +10,7 @@ public class IFCooldownSwingRemove {
 	
     @SubscribeEvent
     public static void onAttackEntity(final AttackEntityEvent e) {
-    	ItemStack item = e.getEntityLiving().getHeldItemMainhand();
+    	ItemStack item = e.getEntityLiving().getMainHandItem();
 
         if (item == IFItems.FIRE_OPAL_SWORD.get().getDefaultInstance() || 
         		item == IFItems.OPAL_SWORD.get().getDefaultInstance() || 
@@ -19,7 +19,7 @@ public class IFCooldownSwingRemove {
         		item == IFItems.OBSIDIAN_SWORD.get().getDefaultInstance() ||
         		item == IFItems.TITANITE_SWORD.get().getDefaultInstance()) {
             PlayerEntity player = e.getPlayer();
-            player.resetCooldown();
+            player.getCooldowns().removeCooldown(item.getItem());;
         }   
     }
 }

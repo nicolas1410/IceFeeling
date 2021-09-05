@@ -31,57 +31,57 @@ public class IFMeteorHeadModel<T extends Entity> extends SegmentedModel<T> {
 		builder.addAll(Arrays.asList(this.meteorCubes));
 		this.immutableList = builder.build();
 
-		textureWidth = 64;
-		textureHeight = 32;
+		texWidth = 64;
+		texHeight = 32;
 		
 	}
 
 	@Override
-	public Iterable<ModelRenderer> getParts() {
+	public Iterable<ModelRenderer> parts() {
 		return this.immutableList;
 	}
 
 	@Override
-	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		
 		float f = ageInTicks * (float) Math.PI * 0.06F;
 		
 		for (int i = 0; i < 2; ++i) {
-			this.meteorCubes[i].rotationPointY = 7.0F + MathHelper.cos(((float) (i * 2) + ageInTicks) * 0.6F);
-			this.meteorCubes[i].rotationPointX = MathHelper.cos(f) * 9.0F;
-			this.meteorCubes[i].rotationPointZ = MathHelper.sin(f) * 9.0F;
+			this.meteorCubes[i].yRot = 7.0F + MathHelper.cos(((float) (i * 2) + ageInTicks) * 0.6F);
+			this.meteorCubes[i].xRot = MathHelper.cos(f) * 9.0F;
+			this.meteorCubes[i].zRot = MathHelper.sin(f) * 9.0F;
 			++f;
 		}
 
 		f = ((float) Math.PI / 4F) + ageInTicks * (float) Math.PI * 0.09F;
 
 		for (int j = 2; j < 8; ++j) {
-			this.meteorCubes[j].rotationPointY = 7.5F + MathHelper.cos(((float) (j * 2) + ageInTicks) * 0.45F);
-			this.meteorCubes[j].rotationPointX = MathHelper.cos(f) * 9.0F;
-			this.meteorCubes[j].rotationPointZ = MathHelper.sin(f) * 9.0F;
+			this.meteorCubes[j].yRot = 7.5F + MathHelper.cos(((float) (j * 2) + ageInTicks) * 0.45F);
+			this.meteorCubes[j].xRot = MathHelper.cos(f) * 9.0F;
+			this.meteorCubes[j].zRot = MathHelper.sin(f) * 9.0F;
 			++f;
 		}
 
 		f = 0.47123894F + ageInTicks * (float) Math.PI * -0.08F;
 
 		for (int k = 4; k < 6; ++k) {
-			this.meteorCubes[k].rotationPointY = 3.0F + MathHelper.cos(((float) k * 1.5F + ageInTicks) * 0.5F);
-			this.meteorCubes[k].rotationPointX = MathHelper.cos(f) * 11.0F;
-			this.meteorCubes[k].rotationPointZ = MathHelper.sin(f) * 11.0F;
+			this.meteorCubes[k].yRot = 3.0F + MathHelper.cos(((float) k * 1.5F + ageInTicks) * 0.5F);
+			this.meteorCubes[k].xRot = MathHelper.cos(f) * 11.0F;
+			this.meteorCubes[k].zRot = MathHelper.sin(f) * 11.0F;
 			++f;
 		}
 		
 		f = 0.27123894F + ageInTicks * (float) Math.PI * -0.12F;
 
 		for (int k = 6; k < 8; ++k) {
-			this.meteorCubes[k].rotationPointY = 5.0F + MathHelper.cos(((float) k * 1.5F + ageInTicks) * 0.7F);
-			this.meteorCubes[k].rotationPointX = MathHelper.cos(f) * 9.0F;
-			this.meteorCubes[k].rotationPointZ = MathHelper.sin(f) * 9.0F;
+			this.meteorCubes[k].yRot = 5.0F + MathHelper.cos(((float) k * 1.5F + ageInTicks) * 0.7F);
+			this.meteorCubes[k].xRot = MathHelper.cos(f) * 9.0F;
+			this.meteorCubes[k].zRot = MathHelper.sin(f) * 9.0F;
 			++f;
 		}
 
-		this.meteorHead.rotateAngleY = netHeadYaw * ((float) Math.PI / 180F);
-		this.meteorHead.rotateAngleX = headPitch * ((float) Math.PI / 180F);
+		this.meteorHead.yRot = netHeadYaw * ((float) Math.PI / 180F);
+		this.meteorHead.xRot = headPitch * ((float) Math.PI / 180F);
 	}
 
 

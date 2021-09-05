@@ -16,33 +16,33 @@ public class IFFireOpalApple extends Item {
 
 	public IFFireOpalApple(Properties properties, Rarity rarity) {
 
-		super(new Item.Properties().group(Main.ICEFEELING).rarity(rarity)
-				.food(new Food.Builder().hunger(4).saturation(5.0F).setAlwaysEdible().build()));
+		super(new Item.Properties().tab(Main.ICEFEELING).rarity(rarity)
+				.food(new Food.Builder().nutrition(4).saturationMod(5.0F).alwaysEat().build()));
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean isFoil(ItemStack stack) {
 		return true;
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity entity) {
+	public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
 		if (hasFullSet(stack, stack.getEquipmentSlot(), entity)) {
 			
-			entity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 1200, 4));
-			entity.addPotionEffect(new EffectInstance(Effects.SPEED, 1200, 1));
+			entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 1200, 4));
+			entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 1200, 1));
 
 		}
 
-		return this.isFood() ? entity.onFoodEaten(world, stack) : stack;
+		return this.isEdible() ? entity.eat(world, stack) : stack;
 	}
 
 	private boolean hasFullSet(ItemStack stack, EquipmentSlotType slot, LivingEntity entity) {
 
-		return 	   entity.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IFItems.OPAL_HELMET.get()
-				&& entity.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == IFItems.OPAL_CHESTPLATE.get()
-				&& entity.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == IFItems.OPAL_LEGGINGS.get()
-				&& entity.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == IFItems.OPAL_BOOTS.get();
+		return 	   entity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == IFItems.OPAL_HELMET.get()
+				&& entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == IFItems.OPAL_CHESTPLATE.get()
+				&& entity.getItemBySlot(EquipmentSlotType.LEGS).getItem() == IFItems.OPAL_LEGGINGS.get()
+				&& entity.getItemBySlot(EquipmentSlotType.FEET).getItem() == IFItems.OPAL_BOOTS.get();
 	}
 
 }

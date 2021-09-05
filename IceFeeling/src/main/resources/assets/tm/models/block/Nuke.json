@@ -1,8 +1,0 @@
-{
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "bottom": "tm:blocks/nuke_bottom",
-        "top": "tm:blocks/nuke_top",
-        "side": "tm:blocks/nuke_side"
-    }
-}

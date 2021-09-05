@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "icefeeling:titanite_ore"
-  },
-  "result": "icefeeling:titanite_ingot",
-  "experience": 1.0,
-  "cookingtime": 200
-}

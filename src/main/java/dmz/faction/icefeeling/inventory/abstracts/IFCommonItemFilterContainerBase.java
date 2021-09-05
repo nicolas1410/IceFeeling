@@ -27,11 +27,11 @@ public abstract class IFCommonItemFilterContainerBase extends Container {
 
 	public IFCommonItemFilterContainerBase(ContainerType<?> containerType, int id, PlayerInventory playerInventory, BlockPos pos, World world, PlayerEntity player, IInventory inventory) {
 		super(containerType, id);
-		assertInventorySize(inventory, 1);
+		checkContainerSize(inventory, 1);
 		this.inventory = inventory;
 		this.playerInventory = new InvWrapper(playerInventory);
-		this.te = (IFCommonItemFilterTileBase) world.getTileEntity(pos);
-		inventory.openInventory(playerInventory.player);
+		this.te = (IFCommonItemFilterTileBase) world.getBlockEntity(pos);
+		inventory.startOpen(playerInventory.player);
 		// slot
 		this.addSlot(new IFCommonItemFilterSlot(te, 0, 80, 62));
 		layoutPlayerInventorySlots(8, 139);
@@ -42,8 +42,8 @@ public abstract class IFCommonItemFilterContainerBase extends Container {
 	 * Determines whether supplied player can use this container
 	 */
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return this.inventory.isUsableByPlayer(playerIn);
+	public boolean stillValid(PlayerEntity playerIn) {
+		return this.inventory.stillValid(playerIn);
 	}
 
 	/**
@@ -79,37 +79,28 @@ public abstract class IFCommonItemFilterContainerBase extends Container {
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
-			if (index < this.inventory.getSizeInventory()) {
-				if (!this.mergeItemStack(itemstack1, this.inventory.getSizeInventory(), this.inventorySlots.size(),
+			if (index < this.inventory.getContainerSize()) {
+				if (!this.moveItemStackTo(itemstack1, this.inventory.getContainerSize(), this.slots.size(),
 						true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, this.inventory.getSizeInventory(), false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, this.inventory.getContainerSize(), false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 		}
 
 		return itemstack;
-	}
-
-	/**
-	 * Called when the container is closed.
-	 */
-	@Override
-	public void onContainerClosed(PlayerEntity playerIn) {
-		super.onContainerClosed(playerIn);
-		this.inventory.closeInventory(playerIn);
 	}
 }

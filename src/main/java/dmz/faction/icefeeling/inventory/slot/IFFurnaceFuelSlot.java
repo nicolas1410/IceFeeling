@@ -17,12 +17,14 @@ public class IFFurnaceFuelSlot extends Slot {
    /**
     * Check if the stack is allowed to be placed in this slot, used for armor slots as well as furnace fuel.
     */
-   public boolean isItemValid(ItemStack stack) {
+   @Override
+   public boolean mayPlace(ItemStack stack) {
       return IFAbstractFurnaceTileEntity.isFuel(stack) || isBucket(stack);
    }
 
-   public int getItemStackLimit(ItemStack stack) {
-      return isBucket(stack) ? 1 : super.getItemStackLimit(stack);
+   @Override
+   public int getMaxStackSize(ItemStack stack) {
+      return isBucket(stack) ? 1 : super.getMaxStackSize(stack);
    }
 
    public static boolean isBucket(ItemStack stack) {

@@ -28,18 +28,18 @@ public class IFSwordItem extends SwordItem {
 
 	// Set on fire entitites for 10 seconds on hit, only on FIRE OPAL SWORD
 	@Override
-	public boolean hitEntity(final ItemStack stack, final LivingEntity target, final LivingEntity attacker) {
+	public boolean hurtEnemy(final ItemStack stack, final LivingEntity target, final LivingEntity attacker) {
 
 		if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
 			if (attacker instanceof PlayerEntity) {
-				target.setFire(10);
+				target.setSecondsOnFire(10);
 			}
 		} else {
 			return false;
 		}
 
-		stack.damageItem(1, attacker, (entity) -> {
-			entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+		stack.hurtAndBreak(1, attacker, (entity) -> {
+			entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
 		});
 		return true;
 	}
@@ -55,12 +55,12 @@ public class IFSwordItem extends SwordItem {
 	}
 
 	@Override
-	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+	public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
 		if (toRepair.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
 			return false;
 		}
 
-		return this.getTier().getRepairMaterial().test(repair) || super.getIsRepairable(toRepair, repair);
+		return this.getTier().getRepairIngredient().test(repair) || super.isValidRepairItem(toRepair, repair);
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class IFSwordItem extends SwordItem {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean isFoil(ItemStack stack) {
 
 		if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
 			return true;
@@ -86,13 +86,13 @@ public class IFSwordItem extends SwordItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
 			ITooltipFlag flagIn) {
 
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
 		if (stack.getItem() == IFItems.FIRE_OPAL_SWORD.get()) {
-			tooltip.add(new StringTextComponent("Fire Aspect II").mergeStyle(TextFormatting.GRAY));
+			tooltip.add(new StringTextComponent("Fire Aspect II").withStyle(TextFormatting.GRAY));
 		}
 
 	}

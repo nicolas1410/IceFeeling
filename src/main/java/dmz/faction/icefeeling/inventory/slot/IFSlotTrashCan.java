@@ -16,12 +16,12 @@ public class IFSlotTrashCan extends Slot {
 	}
 	
 	@Override
-	public ItemStack getStack() {
-		return this.inventory.getStackInSlot(this.slotIndex);
+	public ItemStack getItem() {
+		return this.container.getItem(this.slotIndex);
 	}
 
 	@Override
-	public void onSlotChanged() {
-		this.inventory.markDirty();
+	public void setChanged() {
+		this.container.setChanged();;
 	}
 }

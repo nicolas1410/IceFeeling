@@ -14,7 +14,7 @@ public class IFIronFurnaceBlock extends IFAbstractFurnaceBlock {
 
 	public IFIronFurnaceBlock(AbstractBlock.Properties properties) {
 		super(properties);
-		this.setDefaultState(this.getDefaultState().with(BlockStateProperties.LIT, false));
+		this.registerDefaultState(this.defaultBlockState().setValue(BlockStateProperties.LIT, false));
 
 	}
 

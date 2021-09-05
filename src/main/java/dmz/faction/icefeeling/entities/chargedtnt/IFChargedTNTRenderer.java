@@ -22,7 +22,7 @@ public class IFChargedTNTRenderer extends EntityRenderer<IFChargedTNTEntity> {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(IFChargedTNTEntity entity) {
+    public ResourceLocation getTextureLocation(IFChargedTNTEntity entity) {
         System.out.println(CHARGED_TNT_TEXTURE.toString());
 
         return CHARGED_TNT_TEXTURE;
@@ -32,7 +32,7 @@ public class IFChargedTNTRenderer extends EntityRenderer<IFChargedTNTEntity> {
     @Override
     public void render(IFChargedTNTEntity entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) 
     {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0.0D, 0.5D, 0.0D);
         if ((float)entity.getFuse() - partialTicks + 1.0F < 10.0F) {
             float f = 1.0F - ((float)entity.getFuse() - partialTicks + 1.0F) / 10.0F;
@@ -43,13 +43,15 @@ public class IFChargedTNTRenderer extends EntityRenderer<IFChargedTNTEntity> {
             matrixStackIn.scale(f1, f1, f1);
         }
 
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-90.0F));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
         matrixStackIn.translate(-0.5D, -0.5D, 0.5D);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90.0F));
-        TNTMinecartRenderer.renderTntFlash(IFBlocks.CHARGED_TNT.get().getDefaultState(), matrixStackIn, bufferIn, packedLightIn, entity.getFuse() / 5 % 2 == 0);
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+        TNTMinecartRenderer.renderWhiteSolidBlock(IFBlocks.CHARGED_TNT.get().defaultBlockState(), matrixStackIn, bufferIn, packedLightIn, entity.getFuse() / 5 % 2 == 0);
+        matrixStackIn.popPose();
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
+
+
    
     
 }

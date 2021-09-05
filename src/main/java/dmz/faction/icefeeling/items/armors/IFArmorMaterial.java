@@ -9,27 +9,25 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum IFArmorMaterial implements IArmorMaterial {
 
 	
-	JADE("jade", 40, new int[]{2, 4, 6, 3}, 20, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //15 points
-		return Ingredient.fromItems(IFItems.JADE.get());
+	JADE("jade", 40, new int[]{2, 4, 6, 3}, 20, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //15 points
+		return Ingredient.of(IFItems.JADE.get());
 	}),
-	TITANITE("titanite", 150, new int[]{2, 5, 6, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //16 points
-		return Ingredient.fromItems(IFItems.TITANITE_INGOT.get());
+	TITANITE("titanite", 150, new int[]{2, 5, 6, 3}, 15, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //16 points
+		return Ingredient.of(IFItems.TITANITE_INGOT.get());
 	}),
-	MYTHRIL("mythril", 40, new int[]{3, 6, 7, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //20 points
-		return Ingredient.fromItems(IFItems.MYTHRIL_INGOT.get());
+	MYTHRIL("mythril", 40, new int[]{3, 6, 7, 4}, 15, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0F, () -> { //20 points
+		return Ingredient.of(IFItems.MYTHRIL_INGOT.get());
 	}),
 
-	OBSIDIAN("obsidian", 80, new int[]{4, 7, 9, 4}, 7, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.0F, 0.1F, () -> { //24 points
-		return Ingredient.fromItems(IFItems.OBSIDIAN_INGOT.get());
+	OBSIDIAN("obsidian", 80, new int[]{4, 7, 9, 4}, 7, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0.1F, () -> { //24 points
+		return Ingredient.of(IFItems.OBSIDIAN_INGOT.get());
 	}),
-	OPAL("opal", 60, new int[]{5, 8, 10, 5}, 5, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 3.0F, 0.1F, () -> { //28 points
-		return Ingredient.fromItems(IFItems.OPAL.get());
+	OPAL("opal", 60, new int[]{5, 8, 10, 5}, 5, SoundEvents.ARMOR_EQUIP_GOLD, 3.0F, 0.1F, () -> { //28 points
+		return Ingredient.of(IFItems.OPAL.get());
 	});
 	
 	//NETHERITE("netherite", 37, new int[]{3, 6, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0F, 0.1F, () -> { 20
@@ -57,30 +55,34 @@ public enum IFArmorMaterial implements IArmorMaterial {
 		this.repairMaterial = new LazyValue<>(repairMaterial);
 		   }
 
-	public int getDurability(EquipmentSlotType slotIn) 
+	@Override
+	public int getDurabilityForSlot(EquipmentSlotType slotIn) 
 	{
 			return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
 	}
 
-	public int getDamageReductionAmount(EquipmentSlotType slotIn) 
+	@Override
+	public int getDefenseForSlot(EquipmentSlotType slotIn) 
 	{
 			return this.damageReductionAmountArray[slotIn.getIndex()];
 	}
 
-	public int getEnchantability()
+	@Override
+	public int getEnchantmentValue()
 	{
 			return this.enchantability;
 	}
 
-	public SoundEvent getSoundEvent() {
+	@Override
+	public SoundEvent getEquipSound() {
 			return this.soundEvent;
 	}
 
-	public Ingredient getRepairMaterial() {
-			return this.repairMaterial.getValue();
+	@Override
+	public Ingredient getRepairIngredient() {
+			return this.repairMaterial.get();
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	public String getName() {
 			return this.name;
 	}
@@ -95,5 +97,6 @@ public enum IFArmorMaterial implements IArmorMaterial {
 	public float getKnockbackResistance() {
 			return this.knockbackResistance;
 	}
+
 }
 

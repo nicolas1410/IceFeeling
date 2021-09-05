@@ -20,7 +20,7 @@ public class IFSlotSingleItemChest extends Slot {
 	 * as well as furnace fuel.
 	 */
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean mayPlace(ItemStack stack) {
 
 		if (stack.getItem() == Items.COBBLESTONE || stack.getItem() == Items.DIRT || stack.getItem() == Items.SAND || stack.getItem() == Items.GRAVEL) {
 			return true;
@@ -28,29 +28,24 @@ public class IFSlotSingleItemChest extends Slot {
 			return false;
 		}
 	}
-	
-	
-	public static int SlotStackLimit() {
+
+	@Override
+	public ItemStack getItem() {
+		return this.container.getItem(this.slotIndex);
+	}
+
+	@Override
+	public int getMaxStackSize() {
 		return maxSlotStackLimit;
 	}
 
 	@Override
-	public ItemStack getStack() {
-		return this.inventory.getStackInSlot(this.slotIndex);
+	public int getMaxStackSize(ItemStack stack) {
+		return this.getMaxStackSize();
 	}
 
 	@Override
-	public int getSlotStackLimit() {
-		return maxSlotStackLimit;
-	}
-
-	@Override
-	public int getItemStackLimit(ItemStack stack) {
-		return this.getSlotStackLimit();
-	}
-
-	@Override
-	public void onSlotChanged() {
-		this.inventory.markDirty();
+	public void setChanged() {
+		this.container.setChanged();
 	}
 }

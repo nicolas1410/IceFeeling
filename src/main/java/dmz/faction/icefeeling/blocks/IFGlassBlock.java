@@ -28,8 +28,9 @@ public class IFGlassBlock extends Block {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isSideInvisible(BlockState state, BlockState adjacentBlockState, Direction side) {
-		return adjacentBlockState.isIn(this) ? true : super.isSideInvisible(state, adjacentBlockState, side);
+		return adjacentBlockState.is(this) ? true : super.skipRendering(state, adjacentBlockState, side);
 	}
 
 }

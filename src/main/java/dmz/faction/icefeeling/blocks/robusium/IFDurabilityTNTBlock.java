@@ -29,7 +29,7 @@ public class IFDurabilityTNTBlock extends Block implements IForgeBlockState {
 	}
 	
 	protected int getTNTDurability(BlockState state) {
-	      return state.get(this.getTNTProperty());
+	      return state.getValue(this.getTNTProperty());
 	}
 	
 	protected int getMaxDurability() {
@@ -37,11 +37,11 @@ public class IFDurabilityTNTBlock extends Block implements IForgeBlockState {
 	}
 
 	protected boolean isMaxDurability(BlockState state) {
-		return state.get(this.getTNTProperty()) >= this.getMaxDurability();
+		return state.getValue(this.getTNTProperty()) >= this.getMaxDurability();
 	}
 
 	protected BlockState withDurability(int durability) {
-	      return this.getDefaultState().with(this.getTNTProperty(), Integer.valueOf(durability));
+	      return this.defaultBlockState().setValue(this.getTNTProperty(), Integer.valueOf(durability));
 	}
 
 	@Override
@@ -53,10 +53,10 @@ public class IFDurabilityTNTBlock extends Block implements IForgeBlockState {
 		 * 	Charged TNT + 2 durability
 		 * 	TNT + 1 durability
 		 * 
-		 * 	When durability hits 10 or more, the block is suppressed
+		 * 	When durability hits 10 or more, the block is removed
 		 * 
 		 * */
-		if(!world.isRemote ) 
+		if(!world.isClientSide ) 
 		{
 			int i = this.getTNTDurability(state) ;
 			
@@ -64,17 +64,17 @@ public class IFDurabilityTNTBlock extends Block implements IForgeBlockState {
 					{
 						if(expl.getExploder() instanceof CreeperEntity) 
 						{
-							world.setBlockState(pos, this.withDurability(i + 2), 3);
+							world.setBlock(pos, this.withDurability(i + 2), 3);
 							System.out.println("Block durability Creeper :" + i);
 							
 						} else if((expl.getExploder() instanceof IFChargedTNTEntity)) 
 						{
-							world.setBlockState(pos, this.withDurability(i + 2), 3);
+							world.setBlock(pos, this.withDurability(i + 2), 3);
 							System.out.println("Block durability Charged TNT :" + i);
 							
 						} else if((expl.getExploder() instanceof TNTEntity))
 						{
-							world.setBlockState(pos, this.withDurability(i + 1), 3);
+							world.setBlock(pos, this.withDurability(i + 1), 3);
 							System.out.println("Block durability TNT :" + i);
 						}
 						
@@ -83,8 +83,8 @@ public class IFDurabilityTNTBlock extends Block implements IForgeBlockState {
 					if(i >= this.getMaxDurability()) 
 					{					
 						System.out.println("Blockstate at max durability, block destroyed");
-				        world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-						getBlock().onExplosionDestroy(world, pos, expl);
+				        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+						getBlock().onBlockExploded(state, world, pos, expl);
 					}
 		}	
 	}

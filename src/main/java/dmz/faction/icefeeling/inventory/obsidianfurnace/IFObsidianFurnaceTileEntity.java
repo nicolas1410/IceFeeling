@@ -1,7 +1,6 @@
 package dmz.faction.icefeeling.inventory.obsidianfurnace;
 
 import dmz.faction.icefeeling.inventory.abstracts.IFAbstractFurnaceTileEntity;
-import dmz.faction.icefeeling.items.consumables.IFBurnableItems;
 import dmz.faction.icefeeling.mod.registry.IFTileRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -25,12 +24,12 @@ public class IFObsidianFurnaceTileEntity extends IFAbstractFurnaceTileEntity {
 
 	@Override
 	public Container IcreateMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new IFObsidianFurnaceContainer(id, world, pos, playerInventory, playerEntity, this.furnaceData);
+		return new IFObsidianFurnaceContainer(id, level, pos, playerInventory, playerEntity, this.furnaceData);
 	}
 
 	@Override
 	public boolean IcanExtractItem(int index, ItemStack stack, Direction direction) {
-		if (direction == direction.DOWN) {
+		if (direction == Direction.DOWN) {
 			return true;
 		}
 		return false;
@@ -38,9 +37,9 @@ public class IFObsidianFurnaceTileEntity extends IFAbstractFurnaceTileEntity {
 
 	@Override
 	public int[] getSlotsForFace(Direction side) {
-		if(side == side.UP)
+		if(side == Direction.UP)
 			return INPUT;
-		if(side == side.DOWN)
+		if(side == Direction.DOWN)
 			return OUTPUT;
 		return null;
 	}
